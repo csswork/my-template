@@ -120,8 +120,8 @@
                 </div>
                 <div class="ai-show">
                     <div class="images">
-                        <figure id="js-ai-image-0"><img :src="img" alt="photo" id="pthumb2"></figure>
-                        <figure></figure>
+                        <figure id="js-ai-image-0"><img src="https://soujpg-images-1307121509.cos.ap-shanghai.myqcloud.com/souJpg/images/cSyqyvEY3mZzoKCzQZLD64.webp" alt="photo" id="pthumb2"></figure>
+                        <figure id="js-ai-image-1"></figure>
                     </div>
 
                 </div>
@@ -135,7 +135,6 @@
 
 <script>
 const axios = require('axios');
-
 const api_url = 'https://www.soujpg.com:8006/rest/image-search';
 const api_key = '1tutcv2w5e9VakyxE4xJkH';
 
@@ -151,6 +150,98 @@ const getRandomPrompts = () => {
     });
 };
 
+const generateImage = () => {
+    const img_url = document.getElementById('js-ai-image-0').src;
+
+    // https://gitee.com/jasstionzyf/sou-jpg-web-api-doc/blob/master/sd/SJ_framework_1/sd.md#/jasstionzyf/sou-jpg-web-api-doc/blob/master/sd/SJ_framework_1/styleNameList.md
+    const params = {
+        // serviceMethod: 'text2Image',
+        // userId: '1tutcv2w5e9VakyxE4xJkH',
+        // framework: 'SJ_framework_1',
+        // // 1tu-anime
+        // // 1tu-general
+        // styleName: '1tu-general',
+        // returnType: 'imageName',
+        // prompts: 'test',
+        // asyncRequest: true,
+        // // guidance_scale: 7.5,
+        // numInferenceSteps: 8,
+        // // height: 1024,
+        // // width: 1024,
+        // // num_inference_steps: 25,
+        // batchSize: 2,
+        // // negative_prompt
+        // // modelName: 'SJ_modelName_general_0',
+        // controlNetInfoList: [{
+        //     controlNetName: 'SJ_controlNet_canny_0',
+        //     controlMode: 'canny',
+        //     controlnetConditioningScale: 0.5,
+        //     url: 'https://soujpg-images-1307121509.cos.ap-shanghai.myqcloud.com/souJpg/images/cSyqyvEY3mZzoKCzQZLD64.webp',
+        // }],
+
+        'serviceMethod': 'text2Image',
+        'styleName': '1tu-anime',
+        'prompts': 'a dog',
+        'numInferenceSteps': 8,
+        'batchSize': 2,
+        'framework': 'SJ_framework_1',
+        'userId': api_key,
+        'returnType': 'url',
+        'asyncRequest': true,
+        'controlNetInfoList': [
+            {
+                'modelName': 'SJ_controlNet_canny_0',
+                'controlMode': 'canny',
+                'controlnetConditioningScale': 0.5,
+                'url': img_url,
+            }
+        ]
+    };
+
+    return axios.post(api_url, {
+        params: params,
+    });
+    
+}
+
+let timer = null;
+
+const getAsyncRequest = (requestId) => {
+    const params = {
+        serviceMethod: 'fetchAsyncRequestStatus',
+        userId: api_key,
+        // opName: 'image-search_' + opName,
+        asyncRequestId: requestId,
+    };
+
+    return axios.post(api_url, {
+        params: params,
+    });
+};
+
+const Pool = (requestId) => {
+    timer = setTimeout(() => {
+        getAsyncRequest(requestId).then(res => {
+            if (res.data.error) {
+                alert(res.data.error);
+                clearTimeout(timer);
+                document.getElementById('js-ai-loading').style.display = 'none';
+            } else if (res.data.parameters && res.data.parameters.userId) {
+                // console.log(res.data);
+                clearTimeout(timer);
+                document.getElementById('js-ai-loading').style.display = 'none';
+                document.getElementById('js-ai-image-1').innerHTML = `
+                    <img src="${res.data.generatedImageUrlList[0]}" alt="photo" id="pthumb2">
+                `;
+            } else {
+                Pool(requestId);
+            }
+        });
+    }, 3000);
+};
+
+
+
 //  "userId": "1tutcv2w5e9VakyxE4xJkH",
 
 
@@ -158,7 +249,7 @@ const getRandomPrompts = () => {
 export default {
     data() {
         return {
-            img: require('@/assets/images/img1.jpg'),
+            img: 'https://imgs.1tu.com/images/47/16/14/14/6004777819.jpg-900w.jpg',
         }
     },
 
@@ -173,12 +264,22 @@ export default {
 
         btn.addEventListener('click', () => {
             loading.style.display = 'block';
-            getRandomPrompts().then(res => {
-                console.log(res);
-                loading.style.display = 'none';
-                aiImage.src = res.data[0].url;
+            // getRandomPrompts().then(res => {
+            //     console.log(res);
+            //     loading.style.display = 'none';
+            //     aiImage.src = res.data[0].url;
+            // });
+
+            generateImage().then(res => {
+                console.log(res.data);
+                Pool(res.data.asyncRequestId);
             });
         });
+
+        // Wb6xjFNLVw5bxC7ZHuxSFw
+        // 6qU7WdyMwJyUd2rHJbBGtU
+        
+
     },
 }
 </script>
