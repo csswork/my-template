@@ -138,6 +138,83 @@ const axios = require('axios');
 const api_url = 'https://www.soujpg.com:8006/rest/image-search';
 const api_key = '1tutcv2w5e9VakyxE4xJkH';
 
+const BUCKET_NAME = 'soujpg-private1-1307121509';
+const REGION_NAME = 'ap-beijing';
+const FILE_NAME_PREFIX = 'ai-image/';
+
+class TencentCos {
+    constructor(
+        bucketName = BUCKET_NAME,
+        regionName = REGION_NAME,
+        fileNamePrefix = FILE_NAME_PREFIX
+    ) {
+        this.cos = new COS({
+        getAuthorization: function (options, callback) {
+            fetch('https://www.soujpg.com:8106/rest/image-search', {
+                method: 'POST',
+                body: JSON.stringify({
+                    params: {
+                    serviceMethod: 'tencentCosSts',
+                    bucketName: `${regionName}_${bucketName}`
+                    }
+                }),
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8'
+                }
+            })
+            .then((response) => response.json())
+            .then((data) => {
+                const credentials = data?.credentials?.credentials ?? {};
+                callback({
+                    TmpSecretId: credentials.tmpSecretId,
+                    TmpSecretKey: credentials.tmpSecretKey,
+                    SecurityToken: credentials.sessionToken,
+                    ExpiredTime: data?.credentials?.expiredTime
+                });
+            }).catch((err) => {
+                console.log(err.message);
+            });
+        }
+        });
+        this.bucketName = bucketName;
+        this.regionName = regionName;
+        this.fileNamePrefix = fileNamePrefix;
+    }
+
+    uploadImage(imageData, imageIdKey, func, onProgress) {
+        const url = null;
+
+        this.cos.putObject(
+        {
+            Bucket: this.bucketName,
+            Region: this.regionName,
+
+            Key: this.fileNamePrefix + imageIdKey,
+            Body: imageData,
+            onProgress
+        },
+        func
+        );
+
+        return url;
+    }
+
+    downloadImage(fileName, func, onProgress = () => {}, fileNamePrefix) {
+        this.cos.getObject(
+        {
+            Bucket: this.bucketName,
+            Region: this.regionName,
+            Key: (fileNamePrefix || this.fileNamePrefix) + fileName,
+            DataType: 'blob',
+            onProgress
+        },
+        func
+        );
+    }
+}
+
+const cos = new TencentCos();
+
 const getRandomPrompts = () => {
     const params = {
         serviceMethod: 'getRandomPrompts',
@@ -150,8 +227,10 @@ const getRandomPrompts = () => {
     });
 };
 
+
+
 const generateImage = () => {
-    const img_url = document.getElementById('js-ai-image-0').src;
+    const img_url = document.querySelector('#js-ai-image-0 img').src;
 
     // https://gitee.com/jasstionzyf/sou-jpg-web-api-doc/blob/master/sd/SJ_framework_1/sd.md#/jasstionzyf/sou-jpg-web-api-doc/blob/master/sd/SJ_framework_1/styleNameList.md
     const params = {
@@ -186,8 +265,10 @@ const generateImage = () => {
         'batchSize': 2,
         'framework': 'SJ_framework_1',
         'userId': api_key,
-        'returnType': 'url',
+        'returnType': 'imageName',
         'asyncRequest': true,
+        'width': 800,
+        'height': 400,
         'controlNetInfoList': [
             {
                 'modelName': 'SJ_controlNet_canny_0',
@@ -230,9 +311,18 @@ const Pool = (requestId) => {
                 // console.log(res.data);
                 clearTimeout(timer);
                 document.getElementById('js-ai-loading').style.display = 'none';
-                document.getElementById('js-ai-image-1').innerHTML = `
-                    <img src="${res.data.generatedImageUrlList[0]}" alt="photo" id="pthumb2">
-                `;
+
+                cos.downloadImage(res.data.imageNameList[0], (err, data) => {
+                    if (err) {
+                        console.error(err);
+                    } else {
+                        document.getElementById('js-ai-image-1').innerHTML = `
+                            <img src="${URL.createObjectURL(data.Body)}" alt="photo" id="pthumb2">
+                        `;
+                    }
+                });
+
+                
             } else {
                 Pool(requestId);
             }
