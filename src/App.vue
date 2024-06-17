@@ -273,11 +273,12 @@ class TencentCos {
 
 const cos = new TencentCos();
 
-const getRandomPrompts = () => {
+const getOptimizedPrompts = (prompts) => {
     const params = {
-        serviceMethod: 'getRandomPrompts',
+        serviceMethod: 'promptsOptimization',
+        prompts: prompts,
         userId: api_key,
-        batchSize: 1,
+        maxLength: 256,
     }; 
 
     return fetch(api_url, {
@@ -421,6 +422,10 @@ export default {
         const ai_input_navi_els = document.querySelectorAll('#js-ai-input-navi li');
         const close_ai_modal = document.querySelector('#modal-ai-box .close');
 
+        getOptimizedPrompts('在公共火车上使用手机的商人').then(res => {
+            console.log(res.optimizedPrompts.zh);
+        });
+
         ai_input_navi_els.forEach(el => {
             el.addEventListener('click', () => {
                 if (!el.classList.contains('current')) {
@@ -516,7 +521,13 @@ export default {
             PARAMS.styleName = '1tu-' + document.querySelector('.js-key-item.current span').dataset.key;
             PARAMS.controlNetInfoList[0].modelName = `SJ_controlNet_${document.querySelector('.js-mode-item.current span').dataset.key}_0`;
             PARAMS.controlNetInfoList[0].controlMode = document.querySelector('.js-mode-item.current span').dataset.key;
-            PARAMS.controlNetInfoList[0].controlnetConditioningScale = (Number(ai_range_el.value)/100);
+
+            const value = Number(ai_range_el.value) / 100;
+            const min = 0.3;
+            const max = 0.7;
+            const result = min + (max - min) * value;
+            PARAMS.controlNetInfoList[0].controlnetConditioningScale = result;
+
             PARAMS.prompts = ai_input_el.value;
             // alert(PARAMS.prompts); return;
 
