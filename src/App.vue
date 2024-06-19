@@ -2,6 +2,42 @@
     <div id="wrap" class="wrap not-app">
         <div class="wrap-box" id="modal-ai-box">
             <div class="inner-box">
+                <header class="ai-header">
+                    <div class="logo-item">
+                        <a href="/">
+                            <svg viewBox="0 0 688 166.4">
+                                <polygon points="62.5 0 0 29.7 0 48.3 45.2 27.7 45.2 166.4 62.4 166.4 62.5 0" class="one"></polygon>
+                                <polyline points="0 77.7 19 69 19 166.4 36.2 166.4 36.2 41.3 0 58.6" class="one">
+                                </polyline>
+                                <g class="tu">
+                                    <polygon points="209.6 0 88.8 0 82.2 0 82.2 8.4 82.2 8.8 82.2 17.2 88.8 17.2 209.6 17.2 215 17.2 215 8.8 215 8.4 215 0 209.6 0">
+                                    </polygon>
+                                    <path d="M143.5,166.4H126.3V45.2h-44V28h61.2Z"></path>
+                                    <path d="M153.8,166.4H171V45.2h44V28H153.8Z"></path>
+                                    <path d="M299,138c21.7,0,35.9-17.8,35.9-39.6V0H317.5V98.4c0,12.3-6.4,22.3-18.5,22.3s-18.5-10-18.5-22.3V0H263.1V98.4C263.2,120.2,277.3,138,299,138Z">
+                                    </path>
+                                    <path d="M345.4,0V94.9c0,30-18.9,54.5-46.4,54.5s-46.4-24.4-46.4-54.5V0h-17V94.9c0,28.4,13.7,52.9,35.2,64.5a58.2,58.2,0,0,0,28.1,7.1h.3c36.9,0,63.5-32.1,63.5-71.5V0Z">
+                                    </path>
+                                </g>
+                                <g class="cn">
+                                    <polygon points="574.5 110.4 574.5 94.4 636.2 94.4 638.4 90.8 660.6 90.8 647.6 110.4 574.5 110.4">
+                                    </polygon>
+                                    <polygon points="574.5 133.9 574.5 117.9 636.2 117.9 638.4 114.3 660.6 114.3 647.6 133.9 574.5 133.9">
+                                    </polygon>
+                                    <polygon points="603.9 52.5 618.8 62.8 644.1 45.1 597.6 45.1 594.5 49.1 574.5 49.1 591.3 25 610.2 25 606.6 29.2 660.6 29.2 660.6 52.5 635.3 67.2 660.6 73 660.6 87.2 617.8 77.3 574.5 87.2 574.5 72.6 599.6 67.2 574.5 52.5 603.9 52.5">
+                                    </polygon>
+                                    <path d="M547.1.6V158.3H688V.6ZM670.9,141.2H564.2V17.8H670.9Z"></path>
+                                    <path d="M490.2,143v-9.9h24.5V91.5H408.6v41.6h25.5V143H392.4v15.4H531.8V143Zm-65.5-36.6h73.8v11.2H424.7Zm24.8,26.7h25.3V143H449.5Z">
+                                    </path>
+                                    <path d="M531.9,46.4H392.3v35h16.9v5.2H515V81.4h16.9ZM516.5,71H407.8V61.9H516.5Z">
+                                    </path>
+                                    <polygon points="531.9 21.2 532 5.7 469.8 5.7 469.8 0.2 454.4 0.2 454.4 5.7 392.3 5.7 392.3 21.2 454.4 21.2 454.4 26 401.8 26 401.8 41.5 522.4 41.5 522.4 26 469.8 26 469.8 21.2 531.9 21.2">
+                                    </polygon>
+                                </g>
+                            </svg>
+                        </a>
+                    </div>
+                </header>
                 <navi class="ai-navi">
                     <!-- https://www.figma.com/design/QjMaAjIASzU5qdVCI969C4/AI.icons-%7C-AI-art-generation-icon-set-(Community)?node-id=12-30&t=5eeg1gmpVKRI7G7q-0 -->
                     <ul id="js-ai-input-navi">
@@ -38,40 +74,6 @@
                 </navi>
                 <div class="ai-menus">
                     <div class="col scrollbar-content">
-                        <div class="item logo-item">
-                            <a href="/">
-                                <svg viewBox="0 0 688 166.4">
-                                    <polygon points="62.5 0 0 29.7 0 48.3 45.2 27.7 45.2 166.4 62.4 166.4 62.5 0" class="one"></polygon>
-                                    <polyline points="0 77.7 19 69 19 166.4 36.2 166.4 36.2 41.3 0 58.6" class="one">
-                                    </polyline>
-                                    <g class="tu">
-                                        <polygon points="209.6 0 88.8 0 82.2 0 82.2 8.4 82.2 8.8 82.2 17.2 88.8 17.2 209.6 17.2 215 17.2 215 8.8 215 8.4 215 0 209.6 0">
-                                        </polygon>
-                                        <path d="M143.5,166.4H126.3V45.2h-44V28h61.2Z"></path>
-                                        <path d="M153.8,166.4H171V45.2h44V28H153.8Z"></path>
-                                        <path d="M299,138c21.7,0,35.9-17.8,35.9-39.6V0H317.5V98.4c0,12.3-6.4,22.3-18.5,22.3s-18.5-10-18.5-22.3V0H263.1V98.4C263.2,120.2,277.3,138,299,138Z">
-                                        </path>
-                                        <path d="M345.4,0V94.9c0,30-18.9,54.5-46.4,54.5s-46.4-24.4-46.4-54.5V0h-17V94.9c0,28.4,13.7,52.9,35.2,64.5a58.2,58.2,0,0,0,28.1,7.1h.3c36.9,0,63.5-32.1,63.5-71.5V0Z">
-                                        </path>
-                                    </g>
-                                    <g class="cn">
-                                        <polygon points="574.5 110.4 574.5 94.4 636.2 94.4 638.4 90.8 660.6 90.8 647.6 110.4 574.5 110.4">
-                                        </polygon>
-                                        <polygon points="574.5 133.9 574.5 117.9 636.2 117.9 638.4 114.3 660.6 114.3 647.6 133.9 574.5 133.9">
-                                        </polygon>
-                                        <polygon points="603.9 52.5 618.8 62.8 644.1 45.1 597.6 45.1 594.5 49.1 574.5 49.1 591.3 25 610.2 25 606.6 29.2 660.6 29.2 660.6 52.5 635.3 67.2 660.6 73 660.6 87.2 617.8 77.3 574.5 87.2 574.5 72.6 599.6 67.2 574.5 52.5 603.9 52.5">
-                                        </polygon>
-                                        <path d="M547.1.6V158.3H688V.6ZM670.9,141.2H564.2V17.8H670.9Z"></path>
-                                        <path d="M490.2,143v-9.9h24.5V91.5H408.6v41.6h25.5V143H392.4v15.4H531.8V143Zm-65.5-36.6h73.8v11.2H424.7Zm24.8,26.7h25.3V143H449.5Z">
-                                        </path>
-                                        <path d="M531.9,46.4H392.3v35h16.9v5.2H515V81.4h16.9ZM516.5,71H407.8V61.9H516.5Z">
-                                        </path>
-                                        <polygon points="531.9 21.2 532 5.7 469.8 5.7 469.8 0.2 454.4 0.2 454.4 5.7 392.3 5.7 392.3 21.2 454.4 21.2 454.4 26 401.8 26 401.8 41.5 522.4 41.5 522.4 26 469.8 26 469.8 21.2 531.9 21.2">
-                                        </polygon>
-                                    </g>
-                                </svg>
-                            </a>
-                        </div>
                         
                         <div class="item keyword">
                             <ul id="js-ai-input-menu">
@@ -614,73 +616,38 @@ export default {
 </script>
 
 <style>
-
 #modal-ai-box .inner-box {
-    display: flex;
-    height: 100vh;
-    width: 100%;
-    background: #20373f;
-    position: relative;
+    padding-top: 4.8rem;
 }
 
-#modal-ai-box.type-bgRemover .ai-menus .item {
-    display: none;
+#modal-ai-box .inner-box,
+.ai-menus {
+    height: calc(100vh - 4.8rem);
 }
 
-#modal-ai-box.type-bgRemover .ai-menus .item.logo-item {
-    display: block;
-}
-
-.ai-navi {
-    background: #12252B;
-    position: relative;
-}
-
-.ai-navi li {
-    padding: 1.5rem;
-    cursor: pointer;
-    opacity: .5;
-}
-
-.ai-navi li.current {
-    background: #20373f;
-    opacity: 1;
-}
-
-.ai-navi li:hover {
-    opacity: 1;
-}
-
-.ai-navi li span {
-    color: #fff;
-    display: block;
-    text-align: center;
-    font-size: 1rem;
-    white-space: nowrap;
-}
-
-.ai-navi li span:hover {
-    color: #fff;
-}
-
-.ai-navi li svg {
-    fill: #fff;
-    height: 2.4rem;
-    width: 2.4rem;
-    display: block;
-    margin: 0 auto .85rem;
-
-}
-
-.ai-menus .item.logo-item a {
-    display: block;
-    cursor: pointer;
-    width: 6.8rem;
+.ai-header {
     height: 1.7rem;
+    box-sizing: content-box;
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid rgba(255,255,255,.2);
+    width: 100%;
+    background: #12252B;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+.ai-header .logo-item a {
+    display: block;
+    cursor: pointer;
+    width: 8rem;
+    height: 2rem;
     position: relative;
 }
 
-.ai-menus .item.logo-item a::before {
+.ai-header .logo-item a::before {
     content: 'AI';
     position: absolute;
     bottom: -2px;
@@ -691,27 +658,102 @@ export default {
     margin-left: .5rem;
 }
 
-.ai-menus .item.logo-item a svg {
+.ai-header .logo-item a svg {
     width: 100%;
     height: 100%;
     display: block;
     opacity: .5;
 }
 
-.ai-menus .item.logo-item a:hover svg {
+.ai-header .logo-item a:hover svg {
     opacity: 1;
 }
 
-.ai-menus .item.logo-item a svg .one {
+.ai-header .logo-item a svg .one {
     fill: #fff;
 }
 
-.ai-menus .item.logo-item a svg .tu {
+.ai-header .logo-item a svg .tu {
     fill: #fff;
 }
 
-.ai-menus .item.logo-item a svg .cn {
+.ai-header .logo-item a svg .cn {
     fill: #fff;
+}
+
+
+
+#modal-ai-box .inner-box {
+    display: flex;
+    width: 100%;
+    background: #20373f;
+    position: relative;
+}
+
+#modal-ai-box.type-bgRemover .ai-menus .item {
+    display: none;
+}
+
+.ai-navi {
+    background: #12252B;
+    position: relative;
+    border-right: 1px solid rgba(255,255,255,.2);
+
+}
+
+.ai-navi li {
+    padding: 1rem;
+    cursor: pointer;
+    opacity: .5;
+    margin: .5rem;
+    border-radius: .3rem;
+    background-color: rgba(255,255,255,.08);
+    border: 2px solid rgba(255,255,255,.08);
+
+}
+
+.ai-navi li.current {
+    /* background: #20373f; */
+    opacity: 1;
+    border: 2px solid #d88264;
+}
+
+.ai-navi li.current span {
+    color: #d88264 !important;
+}
+
+.ai-navi li.current svg {
+    fill: #d88264;
+}
+
+.ai-menus .item li.current {
+    border-color: #d88264;
+
+}
+
+.ai-navi li:hover {
+    opacity: 1;
+}
+
+.ai-navi li span {
+    color: #fff;
+    display: block;
+    text-align: center;
+    font-size: .95rem;
+    white-space: nowrap;
+}
+
+.ai-navi li span:hover {
+    color: #fff;
+}
+
+.ai-navi li svg {
+    fill: #fff;
+    height: 2rem;
+    width: 2rem;
+    display: block;
+    margin: 0 auto .85rem;
+
 }
 
 
@@ -725,28 +767,36 @@ export default {
 }
 
 .ai-menus .range-wrap {
-    padding-top: 8px;
+    padding-top: 6px;
     position: relative;
+}
+
+.ai-menus .range-wrap input {
+    z-index: 3;
+    position: relative;
+    background-color: rgba(255,255,255,0.2);;
 }
 
 .ai-menus .range-wrap i {
     display: flex;
     justify-content: space-between;
     color: #fff;
-    font-size: 10px;
-    margin-top: -9px;
+    font-size: 8px;
+    margin-top: 0;
     opacity: 1;
     font-style: normal;
     position: absolute;
     pointer-events: none;
-    width: 20px;
     text-align: center;
-    margin-left: -5px;
+    text-indent: -9999px;
+    width: 1px;
+    background-color: rgba(255,255,255,0.2);
+    color: transparent;
+    z-index: 1;
 }
 
 .ai-menus .range-wrap i:nth-child(1) {
-    left: 2px;
-    margin-left: 0;
+    left: 3px;
 }
 
 .ai-menus .range-wrap i:nth-child(2) {
@@ -754,7 +804,7 @@ export default {
 }
 
 .ai-menus .range-wrap i:nth-child(3) {
-    left: 50%;
+    left: 50.5%;
 }
 
 .ai-menus .range-wrap i:nth-child(4) {
@@ -762,7 +812,7 @@ export default {
 }
 
 .ai-menus .range-wrap i:nth-child(5) {
-    right: -7px;
+    right: 0;
 }
 
 .ai-show .images {
