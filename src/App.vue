@@ -87,6 +87,11 @@
                         <div class="item">
                             <label><span>相似度</span><span id="js-current-vlaue">50%</span></label>
                             <div class="range-wrap">
+                                <i>25</i>
+                                <i>40</i>
+                                <i>55</i>
+                                <i>70</i>
+                                <i>85</i>
                                 <input id="js-ai-range" type="range" min="0" max="100" step="1" value="50">
                             </div>
                         </div>
@@ -127,7 +132,8 @@
                         <div class="item">
                             <label>尺寸比例</label>
                             <ul>
-                                <li class="js-ratio-item current"><span data-ratio="1:1"><i></i>1:1</span></li>
+                                <li class="js-ratio-item current hide"><span data-ratio="0"><i></i>原比例</span></li>
+                                <li class="js-ratio-item"><span data-ratio="1:1"><i></i>1:1</span></li>
                                 <li class="js-ratio-item"><span data-ratio="4:3"><i></i>4:3</span></li>
                                 <li class="js-ratio-item"><span data-ratio="9:16"><i></i>9:16</span></li>
                                 <li class="js-ratio-item"><span data-ratio="16:9"><i></i>16:9</span></li>
@@ -161,6 +167,7 @@
                     <div class="images">
                         <figure id="js-ai-image-0"><img src="https://soujpg-images-1307121509.cos.ap-shanghai.myqcloud.com/souJpg/images/cSyqyvEY3mZzoKCzQZLD64.webp" alt="photo" id="pthumb2"></figure>
                         <figure id="js-ai-image-1"></figure>
+                        <figure id="js-ai-image-2"></figure>
                     </div>
 
                 </div>
@@ -203,7 +210,7 @@ const PARAMS = {
 
 let TYPE = 'text2image';
 let IMAGE_NUMBER = 1;
-let IMAGE_SRC = '';
+let IMAGE_SRC = 'https://soujpg-images-1307121509.cos.ap-shanghai.myqcloud.com/souJpg/images/cSyqyvEY3mZzoKCzQZLD64.webp';
 let TIMER = null;
 
 class TencentCos {
@@ -273,12 +280,31 @@ class TencentCos {
 
 const cos = new TencentCos();
 
-const getOptimizedPrompts = (prompts) => {
+// const getOptimizedPrompts = (prompts) => {
+//     const params = {
+//         serviceMethod: 'promptsOptimization',
+//         prompts: prompts,
+//         userId: api_key,
+//         maxLength: 256,
+//     }; 
+
+//     return fetch(api_url, {
+//         method: 'POST',
+//         headers: {
+//             'Content-Type': 'application/json',
+//         },
+//         body: JSON.stringify({ params: params }),
+//     }).then(response => response.json());
+// };
+
+const getOptimizedPrompts = (img) => {
     const params = {
-        serviceMethod: 'promptsOptimization',
-        prompts: prompts,
+        serviceMethod: 'vl',
+        prompts: [
+            'simple describe this image'
+        ],
+        url: 'https://soujpg-images-1307121509.cos.ap-shanghai.myqcloud.com/souJpg/images/cSyqyvEY3mZzoKCzQZLD64.webp',
         userId: api_key,
-        maxLength: 256,
     }; 
 
     return fetch(api_url, {
@@ -290,6 +316,7 @@ const getOptimizedPrompts = (prompts) => {
     }).then(response => response.json());
 };
 
+
 const bgRemover = (imageData) => {
     //https://gitee.com/jasstionzyf/sou-jpg-web-api-doc/blob/master/imageSearch/bgRemover.md
     const params = {
@@ -298,7 +325,7 @@ const bgRemover = (imageData) => {
         asyncRequest: true,
         returnType: 'imageName',
         // imageBase64Str: imageData,
-        url: 'https://imgs.1tu.com/images/47/16/68/24/6005466582.jpg-450h.jpg',
+        url: 'https://soujpg-images-1307121509.cos.ap-shanghai.myqcloud.com/souJpg/images/cSyqyvEY3mZzoKCzQZLD64.webp',
         /*
         type: if portrait cutout
         default: false
@@ -379,7 +406,7 @@ const Pool = (requestId) => {
                         if (err) {
                             console.error(err);
                         } else {
-                            document.getElementById('js-ai-image-0').innerHTML = `
+                            document.getElementById('js-ai-image-2').innerHTML = `
                                 <img src="${URL.createObjectURL(data.Body)}" alt="photo" id="pthumb1">
                             `;
                         }
@@ -422,8 +449,21 @@ export default {
         const ai_input_navi_els = document.querySelectorAll('#js-ai-input-navi li');
         const close_ai_modal = document.querySelector('#modal-ai-box .close');
 
-        getOptimizedPrompts('在公共火车上使用手机的商人').then(res => {
-            console.log(res.optimizedPrompts.zh);
+        getOptimizedPrompts().then(res => {
+            // console.log(res.vlResults[0].response);
+            let text = res.vlResults[0].response;
+            let sentences = text.match(/[^\.!\?]+[\.!\?]+/g);
+            let result = '';
+
+            for(let i = 0; i < sentences.length; i++) {
+                if((result + sentences[i]).length <= 250) {
+                    result += sentences[i];
+                } else {
+                    break;
+                }
+            }
+
+            console.log(result);
         });
 
         ai_input_navi_els.forEach(el => {
@@ -446,9 +486,6 @@ export default {
                     document.querySelector('#js-ai-input-menu li.current').classList.remove('current');
                     el.classList.add('current');
                     ai_input_el.value = '';
-                    // ai_pas.prompt = el.dataset.input;
-
-                    
 
                     if (el.dataset.input === 'title') {
                         // ai_input_el.classList.add('hidden');
@@ -505,7 +542,12 @@ export default {
                     el.classList.add('current');
 
                     IMAGE_NUMBER = Number(el.querySelector('span').dataset.number);
+
                     PARAMS.batchSize = IMAGE_NUMBER;
+                    document.querySelector('#modal-ai-box').classList.remove('image-number-1');
+                    document.querySelector('#modal-ai-box').classList.remove('image-number-2');
+                    document.querySelector('#modal-ai-box').classList.add('image-number-' + IMAGE_NUMBER);
+
                 }
             });
         });
@@ -516,29 +558,37 @@ export default {
         });
 
         ai_submit_btn.addEventListener('click', () => {
-            if (!IMAGE_SRC) IMAGE_SRC = document.querySelector('#js-ai-image-0 img').src;
+            const img = document.querySelector('#js-ai-image-0 img');
 
             PARAMS.styleName = '1tu-' + document.querySelector('.js-key-item.current span').dataset.key;
             PARAMS.controlNetInfoList[0].modelName = `SJ_controlNet_${document.querySelector('.js-mode-item.current span').dataset.key}_0`;
             PARAMS.controlNetInfoList[0].controlMode = document.querySelector('.js-mode-item.current span').dataset.key;
 
             const value = Number(ai_range_el.value) / 100;
-            const min = 0.3;
-            const max = 0.7;
+            const min = 0.25;
+            const max = 0.85;
             const result = min + (max - min) * value;
             PARAMS.controlNetInfoList[0].controlnetConditioningScale = result;
 
             PARAMS.prompts = ai_input_el.value;
             // alert(PARAMS.prompts); return;
-
-            const ratio = Number(document.querySelector('.js-ratio-item.current span').dataset.ratio.split(':')[0])/Number(document.querySelector('.js-ratio-item.current span').dataset.ratio.split(':')[1]);
+            const r = document.querySelector('.js-ratio-item.current span').dataset.ratio;
+            let ratio = 0;
+            if (r === '0') {
+                ratio = img.naturalWidth / img.naturalHeight;
+            } else {
+                ratio = Number(r.split(':')[0])/Number(r.split(':')[1]);
+            }
+            
             const size = Number(document.querySelector('.js-size-item.current span').dataset.size);
+
+            
 
             if (ratio > 1) {
                 PARAMS.width = size;
-                PARAMS.height = size / ratio;
+                PARAMS.height = Math.round((size / ratio) / 8) * 8;
             } else {
-                PARAMS.width = size * ratio;
+                PARAMS.width = Math.round((size * ratio) / 8) * 8;
                 PARAMS.height = size;
             }
 
@@ -662,5 +712,89 @@ export default {
 
 .ai-menus .item.logo-item a svg .cn {
     fill: #fff;
+}
+
+
+
+.ai-menus .item ul li.hide i {
+    display: none !important;
+}
+
+.ai-menus .item label span:nth-child(2) {
+    opacity: 0;
+}
+
+.ai-menus .range-wrap {
+    padding-top: 8px;
+    position: relative;
+}
+
+.ai-menus .range-wrap i {
+    display: flex;
+    justify-content: space-between;
+    color: #fff;
+    font-size: 10px;
+    margin-top: -9px;
+    opacity: 1;
+    font-style: normal;
+    position: absolute;
+    pointer-events: none;
+    width: 20px;
+    text-align: center;
+    margin-left: -5px;
+}
+
+.ai-menus .range-wrap i:nth-child(1) {
+    left: 2px;
+    margin-left: 0;
+}
+
+.ai-menus .range-wrap i:nth-child(2) {
+    left: 25%;
+}
+
+.ai-menus .range-wrap i:nth-child(3) {
+    left: 50%;
+}
+
+.ai-menus .range-wrap i:nth-child(4) {
+    left: 75%;
+}
+
+.ai-menus .range-wrap i:nth-child(5) {
+    right: -7px;
+}
+
+.ai-show .images {
+    position: relative;
+}
+
+
+#js-ai-image-2 {
+    display: none;
+}
+
+#modal-ai-box.type-text2image.image-number-2 #js-ai-image-0 {
+    position: absolute;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: none;
+    width: auto;
+    height: auto;
+    margin: 0;
+    left: .5rem;
+    margin-top: -.3rem;
+    overflow: hidden;
+    transform: translateY(-100%);
+    
+}
+
+#modal-ai-box.type-text2image.image-number-2 #js-ai-image-0 img {
+    max-width: 10rem;
+    max-height: 10rem;
+}
+
+#modal-ai-box.type-text2image.image-number-2 #js-ai-image-2 {
+    display: block;
 }
 </style>
