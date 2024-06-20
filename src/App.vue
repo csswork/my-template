@@ -1,6 +1,6 @@
 <template>
     <div id="wrap" class="wrap not-app">
-        <div class="wrap-box" id="modal-ai-box">
+        <div class="wrap-box type-text2image" id="modal-ai-box">
             <div class="inner-box">
                 <header class="ai-header">
                     <div class="logo-item">
@@ -85,7 +85,6 @@
                                 <textarea id="js-ai-input" class="hidden" placeholder="请输入创意描述，最多200个字。" maxlength="400">春天里的戴帽子女孩</textarea>
                             </div>
                         </div>
-
                         <div class="item">
                             <label><span>相似度</span><span id="js-current-vlaue">50%</span></label>
                             <div class="range-wrap">
@@ -97,10 +96,27 @@
                                 <input id="js-ai-range" type="range" min="0" max="100" step="1" value="50">
                             </div>
                         </div>
+
+                        <div class="item image-item">
+                            <label><span>参考图</span></label>
+                            <figure id="js-ai-image-0"><img src="https://soujpg-images-1307121509.cos.ap-shanghai.myqcloud.com/souJpg/images/cSyqyvEY3mZzoKCzQZLD64.webp" alt="photo" id="pthumb2"></figure>
+                        </div>
+
+                        <div class="item upload-item">
+                            <ul>
+                                <li><span>上传图片</span></li>
+                                
+                            </ul>
+                        </div>
+
+
+
+
+    
                         <div class="item">
                             <label>风格</label>
                             <ul>
-                                <li class="js-key-item image "><figure><img></figure><span data-key="general">肖像</span></li>
+                                <li class="js-key-item image "><figure><img></figure><span data-key="general">通用模型</span></li>
                                 <li id="js-ai-anime" class="js-key-item image current"><figure></figure><span data-key="anime">卡通</span></li>
                                 
                             </ul>
@@ -167,7 +183,6 @@
                 </div>
                 <div class="ai-show">
                     <div class="images">
-                        <figure id="js-ai-image-0"><img src="https://soujpg-images-1307121509.cos.ap-shanghai.myqcloud.com/souJpg/images/cSyqyvEY3mZzoKCzQZLD64.webp" alt="photo" id="pthumb2"></figure>
                         <figure id="js-ai-image-1"></figure>
                         <figure id="js-ai-image-2"></figure>
                     </div>
@@ -681,7 +696,13 @@ export default {
     fill: #fff;
 }
 
+.upload-item {
+    display: none;
+}
 
+#modal-ai-box.type-bgRemover .ai-menus .item.upload-item {
+    display: block;
+}
 
 #modal-ai-box .inner-box {
     display: flex;
@@ -692,6 +713,17 @@ export default {
 
 #modal-ai-box.type-bgRemover .ai-menus .item {
     display: none;
+}
+
+
+#modal-ai-box.type-bgRemover .ai-menus .item.image-item {
+    display: block;
+    padding-top: 1.5rem;
+}
+
+.ai-menus .image-item img {
+    max-width: 100%;
+    height: 10rem;
 }
 
 .ai-navi {
@@ -710,6 +742,15 @@ export default {
     background-color: rgba(255,255,255,.08);
     border: 2px solid rgba(255,255,255,.08);
 
+}
+
+.ai-menus .item li:hover {
+    background: rgba(255,255,255,.08);
+    border-color: 1px solid rgba(255,255,255,0.2);
+}
+
+.ai-menus .item li.js-ratio-item {
+    width: calc(20% - 1rem);
 }
 
 .ai-navi li.current {
@@ -824,7 +865,7 @@ export default {
     display: none;
 }
 
-#modal-ai-box.type-text2image.image-number-2 #js-ai-image-0 {
+/* #modal-ai-box.type-text2image.image-number-2 #js-ai-image-0 {
     position: absolute;
     background: rgba(255, 255, 255, 0.03);
     border: 1px solid rgba(255, 255, 255, 0.1);
@@ -837,12 +878,12 @@ export default {
     overflow: hidden;
     transform: translateY(-100%);
     
-}
+} */
 
-#modal-ai-box.type-text2image.image-number-2 #js-ai-image-0 img {
+/* #modal-ai-box.type-text2image.image-number-2 #js-ai-image-0 img {
     max-width: 10rem;
     max-height: 10rem;
-}
+} */
 
 #modal-ai-box.type-text2image.image-number-2 #js-ai-image-2 {
     display: block;
