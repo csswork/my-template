@@ -104,7 +104,10 @@
 
                         <div class="item upload-item">
                             <ul>
-                                <li><span>上传图片</span></li>
+                                <li>
+                                    <span>上传图片</span>
+                                    <input id="js-upload-ai-image" type="file" @change="uploadImage" />
+                                </li>
                                 
                             </ul>
                         </div>
@@ -189,7 +192,14 @@
 
                 </div>
                 <div id="js-ai-loading" class="ai-loading">
-                    <span>请稍等，正在创建图片中。</span>
+                    <div class="loading-bar">
+                        <div>
+                            <div class="progress">
+                                <div id="js-progress-bar" class="progress-bar"></div>
+                            </div>
+                            <span>请稍等，正在创建图片中。</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -229,6 +239,8 @@ let TYPE = 'text2image';
 let IMAGE_NUMBER = 1;
 let IMAGE_SRC = 'https://soujpg-images-1307121509.cos.ap-shanghai.myqcloud.com/souJpg/images/cSyqyvEY3mZzoKCzQZLD64.webp';
 let TIMER = null;
+let UPLOAD_IMAGE = null;
+let UPLOAD_IMAGE_NANE = '';
 
 class TencentCos {
     constructor(
@@ -269,33 +281,53 @@ class TencentCos {
         this.fileNamePrefix = fileNamePrefix;
     }
 
-    uploadImage(imageData, imageIdKey, func, onProgress) {
+    uploadImage(imageData, imageIdKey, func, onProgress = () => {},) {
         const url = null;
 
         this.cos.putObject({
             Bucket: this.bucketName,
             Region: this.regionName,
-
             Key: this.fileNamePrefix + imageIdKey,
             Body: imageData,
-            onProgress
-        },func);
+            // onProgress
+            onTaskReady: function(taskId) {
+                console.log(taskId);
+            },
+            onProgress: function (progressData) {
+                console.log(JSON.stringify(progressData));
+            },
+            onFileFinish: function (err, data, options) {
+                console.log(options.Key + '上传' + (err ? '失败' : '完成'));
+            },
+
+        } , func);
 
         return url;
     }
 
-    downloadImage(fileName, func, onProgress = () => {}, fileNamePrefix) {
+    downloadImage(fileName, func, type = 'blob', onProgress = () => {}, fileNamePrefix) {
         this.cos.getObject({
             Bucket: this.bucketName,
             Region: this.regionName,
             Key: (fileNamePrefix || this.fileNamePrefix) + fileName,
-            DataType: 'blob',
+            DataType: type,
             onProgress
-        },func);
+        }, func);
+    }
+
+    getImageUrl(fileName, func) {
+        this.cos.getObjectUrl({
+            Bucket: this.bucketName,
+            Region: this.regionName,
+            Key: fileName,
+            Sign: true,
+        }, func);
     }
 }
 
 const cos = new TencentCos();
+let progress_timer = null;
+let progress = 0;
 
 // const getOptimizedPrompts = (prompts) => {
 //     const params = {
@@ -313,6 +345,28 @@ const cos = new TencentCos();
 //         body: JSON.stringify({ params: params }),
 //     }).then(response => response.json());
 // };
+
+const translateText = (text) => {
+    const params = {
+        serviceMethod: 'translate',
+        sourceText: text,
+        mode: 'en2zh',
+        userId: api_key,
+    };
+
+    return fetch(api_url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ params: params }),
+    }).then(response => response.json());
+};
+
+const loadingProgress = (progress) => {    
+    const progress_bar = document.querySelector('#js-progress-bar');
+    progress_bar.style.width = progress + '%';
+};
 
 const getOptimizedPrompts = (img) => {
     const params = {
@@ -333,7 +387,6 @@ const getOptimizedPrompts = (img) => {
     }).then(response => response.json());
 };
 
-
 const bgRemover = (imageData) => {
     //https://gitee.com/jasstionzyf/sou-jpg-web-api-doc/blob/master/imageSearch/bgRemover.md
     const params = {
@@ -342,7 +395,7 @@ const bgRemover = (imageData) => {
         asyncRequest: true,
         returnType: 'imageName',
         // imageBase64Str: imageData,
-        url: 'https://soujpg-images-1307121509.cos.ap-shanghai.myqcloud.com/souJpg/images/cSyqyvEY3mZzoKCzQZLD64.webp',
+        // url: 'https://soujpg-images-1307121509.cos.ap-shanghai.myqcloud.com/souJpg/images/cSyqyvEY3mZzoKCzQZLD64.webp',
         /*
         type: if portrait cutout
         default: false
@@ -355,6 +408,12 @@ const bgRemover = (imageData) => {
         // 64561737: 通用效果最好，默认
         // modelId: 64561737,
     };
+
+    if (UPLOAD_IMAGE_NANE) {
+        params.imageName = UPLOAD_IMAGE_NANE;
+    } else {
+        params.url = IMAGE_SRC;
+    }
 
     return fetch(api_url, {
         method: 'POST',
@@ -402,11 +461,22 @@ const Pool = (requestId) => {
             if (res.error || res.errorCode) {
                 alert(res.error || res.errorCode);
                 clearTimeout(TIMER);
-                document.getElementById('js-ai-loading').style.display = 'none';
+                if (progress_timer) clearInterval(progress_timer);
+                progress = 0;
+                loadingProgress(100);
+                setTimeout(() => {
+                    document.getElementById('js-ai-loading').style.display = 'none';
+                }, 500);
             } else if (res.imageNameList) {
                 // console.log(res);
                 clearTimeout(TIMER);
-                document.getElementById('js-ai-loading').style.display = 'none';
+                if (progress_timer) clearInterval(progress_timer);
+                progress = 0;
+                loadingProgress(100);
+                
+                setTimeout(() => {
+                    document.getElementById('js-ai-loading').style.display = 'none';
+                }, 500);
 
                 cos.downloadImage(res.imageNameList[0], (err, data) => {
                     if (err) {
@@ -465,6 +535,7 @@ export default {
         const ai_input_menu_els = document.querySelectorAll('#js-ai-input-menu li');
         const ai_input_navi_els = document.querySelectorAll('#js-ai-input-navi li');
         const close_ai_modal = document.querySelector('#modal-ai-box .close');
+        let tags = 'business,holding,person,travel,young,people,transport,transportation,male,man,city,urban,news,message,communication,mobile,phone,smart,lifestyle,businessman,looking,using,chinese,japanese,asian,china,passenger,watching,train,public,media,station,tourist,asia,social,japan,crowded,commute,railway,underground,metro,sms,commuter,smartphone,subway,entrepreneur,texting,Mobile Phone,social distancing';
 
         getOptimizedPrompts().then(res => {
             // console.log(res.vlResults[0].response);
@@ -481,6 +552,53 @@ export default {
             }
 
             console.log(result);
+        });
+        
+        if (!(/[\u4e00-\u9fa5]/.test(tags[0]))) {
+            translateText(tags).then(res => {
+                tags = res.targetText;
+                console.log(res.targetText);
+            });
+        }
+
+        document.querySelector('#js-upload-ai-image').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            const uuid = new Date().getTime();
+            const extension = file.name.slice(((file.name.lastIndexOf('.') - 1) >>> 0) + 2);
+            const filename = 'yitu-' + uuid + '.' + extension;
+            UPLOAD_IMAGE_NANE = filename;
+
+            cos.uploadImage(file, filename, (err, data) => {
+                if (err) {
+                    console.error(err);
+                } else {
+                    UPLOAD_IMAGE = URL.createObjectURL(file);
+                    document.querySelector('#js-ai-image-0 img').src = UPLOAD_IMAGE;
+                    IMAGE_SRC = UPLOAD_IMAGE;
+                    // cos.getImageUrl(filename, (err, data) => {
+                    //         if (err) {
+                    //             console.error(err);
+                    //         } else {
+                    //             let url = data.Url + '&response-content-disposition=inline;filename=' + filename;
+
+                    //             console.log(url);
+                    //             document.querySelector('#js-ai-image-0 img').src = url;
+                    //         }
+                    //     }
+                    // );
+                }
+                // if (err) {
+                //     console.error(err);
+                // } else {
+                //     cos.downloadImage(filename, (err, data) => {
+                //         if (err) {
+                //             console.error(err);
+                //         } else {
+                //             console.log(data.Body);
+                //         }
+                //     });
+                // }
+            });
         });
 
         ai_input_navi_els.forEach(el => {
@@ -509,7 +627,7 @@ export default {
                         ai_input_el.value = '在公共火车上使用手机的商人 ';
                     } else if (el.dataset.input === 'keyword') {
                         // ai_input_el.classList.add('hidden');
-                        ai_input_el.value = 'business,holding,person,travel,young,people,transport,transportation,male,man,city,urban,news,message,communication,mobile,phone,smart,lifestyle,businessman,looking,using,chinese,japanese,asian,china,passenger,watching,train,public,media,station,tourist,asia,social,japan,crowded,commute,railway,underground,metro,sms,commuter,smartphone,subway,entrepreneur,texting,Mobile Phone,social distancing';
+                        ai_input_el.value = tags;
                     }
                     
                 }
@@ -586,7 +704,6 @@ export default {
             const max = 0.85;
             const result = min + (max - min) * value;
             PARAMS.controlNetInfoList[0].controlnetConditioningScale = result;
-
             PARAMS.prompts = ai_input_el.value;
             // alert(PARAMS.prompts); return;
             const r = document.querySelector('.js-ratio-item.current span').dataset.ratio;
@@ -612,6 +729,15 @@ export default {
 
             // console.log(PARAMS)
             ai_loading.style.display = 'block';
+
+            progress_timer = setInterval(() => {
+                if (progress >= 95) {
+                    if (progress_timer) clearInterval(progress_timer);
+                    return;
+                }
+                progress ++;
+                loadingProgress(progress);
+            }, 65);
 
             if (TYPE === 'text2image') {
                 generateImage().then(res => {
@@ -696,12 +822,71 @@ export default {
     fill: #fff;
 }
 
+.ai-loading {
+    color: white;
+    background: rgba(0, 0, 0, 0.5) !important;
+}
+
+.ai-loading .loading-bar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.ai-loading .progress {
+    width: 20rem;
+    height: .5rem;
+    margin-bottom: 1rem;
+    overflow: hidden;
+    background: rgba(255, 255, 255,.2);
+    border-radius: .3rem;
+    position: relative;
+}
+
+.ai-loading .progress-bar {
+    width: 0;
+    height: 100%;
+    background: #d88264;
+    position: absolute;
+    border: none;
+    top: 0;
+    left: 0;
+    transition: width .3s;
+}
+
+#modal-ai-box .ai-loading span {
+    position: static;
+    width: auto;
+    height: auto;
+}
+
 .upload-item {
     display: none;
 }
 
 #modal-ai-box.type-bgRemover .ai-menus .item.upload-item {
     display: block;
+}
+
+.ai-menus .item.upload-item li {
+    position: relative;
+    overflow: hidden;
+}
+
+.ai-menus .item.upload-item li input {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.ai-menus .item.upload-item li canvas {
+    visibility: hidden;
+    position: absolute;
 }
 
 #modal-ai-box .inner-box {
