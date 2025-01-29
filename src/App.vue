@@ -1,9 +1,6 @@
 <template>
     <div id="wrap" class="wrap not-app">
-        <div style="height: 80vh; background-color: #ccc;"></div>
-        <div id="ui-lottie" class="ui-lottie" style="height: 100%;width: 100%;">
-            
-        </div>
+        test
     </div>
 </template>
 
