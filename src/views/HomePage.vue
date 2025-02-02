@@ -27,7 +27,6 @@ import GlobalSidebar from '../components/GlobalSidebar.vue';
 
   .home-page {
     h2 {
-      font: var(--demi-32);
       margin-bottom: 20px;
     }
   }

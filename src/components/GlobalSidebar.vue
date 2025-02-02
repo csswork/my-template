@@ -1,94 +1,15 @@
 <template>
   <el-aside class="global-sidebar" ref="sidebar" :class="{ 'collapsed': isCollapsed }">
     <header>
-      <div class="mobile-menu" @click="toggleMobileMenu">
-        <svg-icon name="menu" />
-      </div>
-      <h1>
-        <router-link to="/" class="heading" :class="{'is-show': GlobalStore.page_heading}">{{ GlobalStore.page_heading }}</router-link>
-        <router-link to="/" class="logo">
-          <svg-icon name="logo-text" />
-          <svg-icon name="logo-a" />
-        </router-link>
-        <el-tooltip
-          :content="isCollapsed ? 'Click to expand menu' : 'Click to collapse menu'"
-          placement="right"
-        >
-          <i @click="collapseMenu">
-            <svg-icon name="double-arrow" />
-          </i>
-        </el-tooltip>
-      </h1>
     </header>
 
     <nav>
       <ul>
-        <li v-for="menu in menus" :key="menu.name">
-          <el-tooltip
-            :disabled="!isCollapsed"
-            :content="menu.name"
-            placement="right"
-          >
-            <router-link :to="menu.path" :class="{ 'router-link-active': route.meta.menu_meta === menu.meta }">
-                <svg-icon :name="menu.icon" />
-                <span>{{ menu.name }}</span>
-                <i v-if="menu.sub_menus" @click="openSubMenu(menu, $event)">
-                  <svg-icon name="menu-arrow" />
-                </i>
-            </router-link>
-          </el-tooltip>
-
-          <!-- <ul class="sub-menu" v-if="menu.sub_menus">
-            <li v-for="sub_menu in menu.sub_menus" :key="sub_menu.name">
-              <router-link :to="sub_menu.path">{{ sub_menu.name }}</router-link>
-            </li>
-          </ul> -->
-        </li>
       </ul>
 
-      <footer class="mobile-footer">
-        <ul class="info">
-          <li>
-            <router-link to="/settings"><svg-icon name="settings" /></router-link>
-          </li>
-          <li>
-            <a href="mailto:help@motom.me"><svg-icon name="square-question" /></a>
-          </li>
-        </ul>
-        <ul class="links">
-          <li v-for="menu in footer_menus" :key="menu.name">
-            <router-link :to="menu.path">{{ menu.name }}</router-link>
-          </li>
-        </ul>
-        <p>
-          <a href="https://www.motom.me" target="_blank">Powered by MOTOM</a><br />
-          Copyright © 2024 Motom
-        </p>
-      </footer>
     </nav>
 
     <footer>
-      <ul class="info">
-        <li>
-          <!-- 搬進去客製化ui-popper -->
-          <UserHead />
-        </li>
-        <li>
-          <router-link to="/settings"><svg-icon name="settings" /></router-link>
-        </li>
-        <li>
-          <a href="mailto:help@motom.me"><svg-icon name="square-question" /></a>
-        </li>
-      </ul>
-      <ul class="links">
-        <li v-for="menu in footer_menus" :key="menu.name">
-          <router-link :to="menu.path">{{ menu.name }}</router-link>
-        </li>
-      </ul>
-      <p>
-        <a href="https://www.motom.me" target="_blank">Powered by MOTOM</a><br />
-        Copyright © 2024 Motom
-      </p>
     </footer>
   </el-aside>
 </template>
@@ -96,7 +17,6 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useGlobalStore } from '@/stores/GlobalStore';
-import UserHead from '@/components/ui/SlidbarUserHead.vue';
 import { useRouter } from 'vue-router';
 import emitter from '@/utils/EventBus';
 
@@ -161,28 +81,7 @@ const menus = ref([
   }
 ]);
 
-const footer_menus = ref([
-  {
-    name: 'Terms & Privacy',
-    path: '/terms-privacy'
-  },
-  {
-    name: 'About Anchor',
-    path: '/about-anchor'
-  },
-  {
-    name: 'Help & Support',
-    path: '/help-support'
-  },
-  {
-    name: 'Report a Bug',
-    path: '/report-bug'
-  },
-  {
-    name: 'Feedback',
-    path: '/feedback'
-  }
-]);
+
 
 const openSubMenu = (menu, event) => {
   event.preventDefault();
@@ -202,19 +101,6 @@ const toggleMobileMenu = () => {
 // };
 
 onMounted(() => {
-  // console.log('GlobalSidebar mounted');
-  // emitter.on('get-user-data', (user) => {
-  //   // console.log('get-user-data', user.current_merchant_account_id);
-  //   if (user.current_merchant_account_id) {
-  //     menus.value.splice(3, 0, {
-  //       name: 'Messages',
-  //       icon: 'comments',
-  //       path: '/messages',
-  //       meta: 'messages',
-  //     });
-  //   }
-
-  // });
 
   if (window.innerWidth <= 1180) {
     isCollapsed.value = true;

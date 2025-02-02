@@ -96,59 +96,10 @@ onBeforeUnmount(() => {
 </script>
 
 <style lang="scss">
-@use '@/assets/scss/fonts';
 @use '@/assets/scss/reset';
-@use '@/assets/scss/register';
-// @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap');
 
 :root {
   --font: 'Franklin Gothic Book', sans-serif;
-  // --font-fg: 'Franklin Gothic', sans-serif;
-  --font-demi: 'Franklin Gothic Demi', sans-serif;
-  --font-med: 'Franklin Gothic Medium', sans-serif;
-  // --font-ms: 'Montserrat', sans-serif;
-  // --font-dm: 'DM Serif Display', sans-serif;
-
-  /* Franklin Gothic Book */
-  --book-10: 400 10px/14px var(--font);
-  --book-12: 400 12px/16px var(--font);
-  --book-14: 400 14px/18px var(--font);
-  --book-16: 400 16px/20px var(--font);
-  --book-18: 400 18px/22px var(--font);
-  --book-20: 400 20px/24px var(--font);
-  --book-22: 400 22px/26px var(--font);
-
-  /* Franklin Gothic Medium */
-  --medium-10: 400 10px/14px var(--font-med);
-  --medium-12: 400 12px/16px var(--font-med);
-  --medium-14: 400 14px/18px var(--font-med);
-  --medium-16: 400 16px/20px var(--font-med);
-  --medium-18: 400 18px/22px var(--font-med);
-  --medium-20: 400 20px/24px var(--font-med);
-  --medium-22: 400 22px/26px var(--font-med);
-  --medium-24: 400 24px/28px var(--font-med);
-  --medium-26: 400 26px/30px var(--font-med);
-  --medium-28: 400 28px/32px var(--font-med);
-  --medium-30: 400 30px/34px var(--font-med);
-  --medium-32: 400 32px/36px var(--font-med);
-  --medium-34: 400 34px/38px var(--font-med);
-  --medium-36: 400 36px/40px var(--font-med);
-
-  /* Franklin Gothic Demi */
-  --demi-10: 400 10px/14px var(--font-demi);
-  --demi-12: 400 12px/16px var(--font-demi);
-  --demi-14: 400 14px/18px var(--font-demi);
-  --demi-16: 400 16px/20px var(--font-demi);
-  --demi-18: 400 18px/22px var(--font-demi);
-  --demi-20: 400 20px/24px var(--font-demi);
-  --demi-22: 400 22px/26px var(--font-demi);
-  --demi-24: 400 24px/28px var(--font-demi);
-  --demi-26: 400 26px/30px var(--font-demi);
-  --demi-28: 400 28px/32px var(--font-demi);
-  --demi-30: 400 30px/34px var(--font-demi);
-  --demi-32: 400 32px/36px var(--font-demi);
-  --demi-34: 400 34px/38px var(--font-demi);
-  --demi-36: 400 36px/40px var(--font-demi);
 
   --PB-100: #232a60;
   --PB-80: #2f398b;
@@ -340,7 +291,10 @@ html {
 }
 
 body {
-  font: var(--book-14);
+  font-family: var(--font);
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--Text-secondary);
 
   /* Font smoothing */
   -webkit-text-size-adjust: 100%;
@@ -366,7 +320,7 @@ body {
   }
 
   .login-container {
-    padding: 0 !important;
+    padding: 0;
     
     .ui-main{
       background: var(--Bg-01);
@@ -393,9 +347,7 @@ a {
 
 .main-content {
   background-color: var(--Bg-light);
-  height: calc(100vh - 10px);
-  margin-top: 10px;
-  border-radius: 16px 0 0 0;
+  height: 100vh;
   box-shadow: var(--card);
 }
 </style>
