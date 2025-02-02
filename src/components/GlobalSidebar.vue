@@ -5,6 +5,13 @@
 
     <nav>
       <ul>
+        <li v-for="menu in menus" :key="menu.name">
+          <router-link :to="menu.path" @click="openSubMenu(menu, $event)">
+            <i v-if="menu.icon" :class="'icon-' + menu.icon"></i>
+            <span>{{ menu.name }}</span>
+            <i v-if="menu.sub_menus" class="icon-arrow-down"></i>
+          </router-link>
+        </li>
       </ul>
 
     </nav>
@@ -16,7 +23,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import { useGlobalStore } from '@/stores/GlobalStore';
+import { useGlobalStore } from '@/stores/Global';
 import { useRouter } from 'vue-router';
 import emitter from '@/utils/EventBus';
 
@@ -38,28 +45,12 @@ const menus = ref([
     icon: 'palette',
     path: '/manage',
     meta: 'manage',
-    sub_menus: [
-      {
-        name: 'Posts',
-        path: '/manage/posts'
-      },
-      {
-        name: 'Pages',
-        path: '/manage/pages'
-      }
-    ]
   },
   {
     name: 'Analytics',
     icon: 'analytics',
     path: '/analytics',
     meta: 'analytics',
-    sub_menus: [
-      {
-        name: 'Overview',
-        path: '/analytics/overview'
-      }
-    ]
   },
   {
     name: 'Messages',

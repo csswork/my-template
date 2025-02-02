@@ -1,6 +1,6 @@
 <template>
   <el-config-provider namespace="ui">
-    <router-view v-if="!me_loading" />
+    <router-view />
   </el-config-provider>
 </template>
 
@@ -8,90 +8,12 @@
 import { watch, onMounted, onBeforeUnmount, ref } from 'vue';
 import ajax from '@/utils/Ajax';
 import router from './router';
-import { useGlobalStore } from './stores/GlobalStore';
+import { useGlobalStore } from './stores/Global';
 import { useRouter } from 'vue-router';
 import emitter from '@/utils/EventBus';
 
-const routerGo = useRouter();
 const GlobalStore = useGlobalStore();
-const me_loading = ref(true);//等checkLoging跑完再跑page
 
-// watch router name
-watch(() => router.currentRoute.value.name, (name) => {
-  // update body class
-  document.body.className = `page-${name}`;
-  GlobalStore.setPageHeading(router.currentRoute.value.meta.heading || '');
-});
-
-GlobalStore.setIsMobile(window.innerWidth < 768);
-let resizeTimeout;
-const handleResize = () => {
-  clearTimeout(resizeTimeout);
-  resizeTimeout = setTimeout(() => {
-    GlobalStore.setIsMobile(window.innerWidth < 768);
-  }, 200);
-};
-
-// const mail = 'ianc@motom.me';
-// const password = 'AbCd023';
-// // temp login
-// const is_login = window.localStorage.getItem('token');
-
-// if (!is_login) {
-//   const mail = 'ianc@motom.me';
-//   const password = 'AbCd023';
-//   // const access_token = btoa(`${mail}:${password}`);
-
-//   ajax.post('/login', { email: mail, password: password }).then((res) => {
-//     window.localStorage.setItem('token', res.data.data.access_token);
-//   }).catch((err) => {
-//     window.localStorage.removeItem('token');
-//     // window.location.reload();
-//   });
-
-// }
-
-const navigateToUrl = (url) => {
-  routerGo.push(url);
-};
-
-const checkLogin = () => {
-  const is_login = window.localStorage && window.localStorage.getItem('token');
-  if (is_login) {
-    ajax.get('/me', { token: is_login }).then((res) => {
-      // console.log('res', res)
-      setTimeout(() => {
-        emitter.emit('get-user-data', res.data);
-      }, 100);
-
-      GlobalStore.user = res.data.data;
-      //user_status=100 ⇒ email過關
-      //在登陸註冊頁以外的地方，token沒過關代表這帳號不完全，要清除token導回登陸頁
-      let rou_value = router.currentRoute.value;
-      if (GlobalStore.user.user_status !== 100 && rou_value.name !== 'register' && !rou_value.meta.login) {
-        GlobalStore.clearToken();
-        window.location.href = '/login';
-      }
-      me_loading.value = false;
-    }).catch((err) => {
-      me_loading.value = false;
-      GlobalStore.clearToken();
-      window.location.href = '/login';
-    });
-  }
-  else {
-    me_loading.value = false;
-  }
-}
-
-onMounted(() => {
-  checkLogin();
-  window.addEventListener('resize', handleResize);
-});
-
-onBeforeUnmount(() => {
-  window.removeEventListener('resize', handleResize);
-});
 
 </script>
 
@@ -99,7 +21,7 @@ onBeforeUnmount(() => {
 @use '@/assets/scss/reset';
 
 :root {
-  --font: 'Franklin Gothic Book', sans-serif;
+  --font: "PingFang SC", "hiragino sans gb", "microsoft yahei ui", "microsoft yahei", "simsun", arial, sans-serif;
 
   --PB-100: #232a60;
   --PB-80: #2f398b;
@@ -326,13 +248,6 @@ body {
       background: var(--Bg-01);
     }
   }
-
-  .analytics-page {
-    padding: 24px;
-    max-width: 1000px;
-    margin: 0 auto;
-  }
-  
 }
 
 a {
