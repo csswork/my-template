@@ -2,7 +2,7 @@
   <global-wrap>
     <div class="home-content">
       <div class="home-page">
-        <h2>Open AI</h2>
+        <h2 @click="openAI">Open AI</h2>
       </div>
     </div>
   </global-wrap>
@@ -11,6 +11,11 @@
 <script setup>
 import router from '../router';
 import GlobalWrap from '../components/GlobalWrap.vue';
+import event from '../utils/EventBus';
+
+const openAI = () => {
+  event.emit('open-ai');
+};
 </script>
 
 <style lang="scss">
@@ -24,6 +29,7 @@ import GlobalWrap from '../components/GlobalWrap.vue';
   .home-page {
     h2 {
       margin-bottom: 20px;
+      cursor: pointer;
     }
   }
 }

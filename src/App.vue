@@ -1,20 +1,14 @@
 <template>
   <el-config-provider namespace="ui">
     <router-view />
+    <ai-image />
+
   </el-config-provider>
 </template>
 
 <script setup>
-import { watch, onMounted, onBeforeUnmount, ref } from 'vue';
-import ajax from '@/utils/Ajax';
-import router from './router';
-import { useGlobalStore } from './stores/Global';
-import { useRouter } from 'vue-router';
-import emitter from '@/utils/EventBus';
-
-const GlobalStore = useGlobalStore();
-
-
+// import { watch, onMounted, onBeforeUnmount, ref } from 'vue';
+import AiImage from './components/AiImage.vue';
 </script>
 
 <style lang="scss">
