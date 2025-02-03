@@ -8,7 +8,7 @@
       size="100%"
     >
       <header class="drawer-header">
-        <el-button type="text" @click="drawerVisible = false"><el-icon><Back /></el-icon> 关闭</el-button>
+        <el-button type="info" icon="Back" @click="drawerVisible = false">关闭</el-button>
       </header>
       <div class="drawer-content">
         <!-- Add your drawer content here -->
