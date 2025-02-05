@@ -2,7 +2,7 @@
   <div class="ai-image-wrap">
     <el-drawer
       class="ai-image-drawer"
-      v-model="drawerVisible"
+      v-model="is_show_ai"
       title="AI Image Drawer"
       direction="rtl"
       size="100%"
@@ -20,13 +20,16 @@
 
 <script setup>
   import { ref, onMounted } from 'vue'
-  const drawerVisible = ref(false);
 
   import ajax from '@/utils/Ajax';
   import { useGlobalStore } from '@/stores/Global';
   import event from '@/utils/EventBus';
 
   const Global = useGlobalStore();
+  const is_show_ai = ref(false);
+
+
+
 
   onMounted(() => {
     event.on('open-ai', () => {
