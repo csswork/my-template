@@ -12,3 +12,4 @@ node_modules/
 error_log
 .vscode/
 dist/
+.dev
