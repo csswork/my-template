@@ -10,7 +10,10 @@ deploy.log
 node_modules/
 *npm-debug.log
 *package-lock.json
+*composer.lock
 error_log
 .vscode/
 dist/
 .dev
+.env
+vendor/
