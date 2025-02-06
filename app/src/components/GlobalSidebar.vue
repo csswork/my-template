@@ -69,7 +69,7 @@
 import { ref, defineAsyncComponent, onMounted } from 'vue';
 import { useGlobalStore } from '@/stores/Global';
 import { useRouter } from 'vue-router';
-import emitter from '@/utils/EventBus';
+import event from '@/utils/EventBus';
 // import { Service } from '@element-plus/icons-vue';
 
 const router = useRouter();
@@ -108,10 +108,13 @@ const menus = ref([
   },
   {
     name: '图片生成',
-    type: 'link',
+    type: 'fun',
     icon: 'MagicStick',
-    path: '/image/generate',
+    // path: '/image/generate',
     meta: 'generate-image',
+    cb: () => {
+      event.emit('open-ai');
+    }
   },
   {
     type: 'hr',
@@ -122,7 +125,7 @@ const menus = ref([
     icon: 'Bell',
     meta: 'notification',
     cb: () => {
-      emitter.emit('open-notification');
+      event.emit('open-notification');
     }
   },
   {
@@ -131,7 +134,7 @@ const menus = ref([
     icon: 'Message',
     meta: 'social-insights',
     cb: () => {
-      emitter.emit('open-invite');
+      event.emit('open-invite');
     }
   }
 ]);

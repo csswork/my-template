@@ -8,7 +8,7 @@
       size="100%"
     >
       <header class="drawer-header">
-        <el-button type="info" icon="Back" @click="drawerVisible = false">关闭</el-button>
+        <el-button type="info" icon="Back" @click="is_show_ai = false">关闭</el-button>
       </header>
       <div class="drawer-content">
         <!-- Add your drawer content here -->
@@ -33,7 +33,7 @@
 
   onMounted(() => {
     event.on('open-ai', () => {
-      drawerVisible.value = true;
+      is_show_ai.value = true;
     });
   });
 
