@@ -10,7 +10,7 @@ $client = Visual::getInstance();
 $client->setAccessKey($_ENV['API_KEY']);
 $client->setSecretKey($_ENV['API_SECRET']);
 
-$body= [
+$body = [
    "req_key"=> "high_aes_general_v21_L",
    "prompt"=> "千军万马",
    "model_version"=> "general_v2.1_L",

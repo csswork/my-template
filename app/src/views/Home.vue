@@ -2,7 +2,7 @@
   <global-wrap>
     <div class="home-content">
       <div class="home-page">
-        <el-button type="primary" @click="TestApi">Test AI</el-button>
+        <!-- <el-button type="primary" @click="TestApi">Test AI</el-button> -->
         <h2 @click="openAI">Open AI</h2>
       </div>
     </div>
@@ -14,7 +14,7 @@ import GlobalWrap from '../components/GlobalWrap.vue';
 import event from '../utils/EventBus';
 import ajax from '../utils/Ajax';
 
-const TestApi = () => {
+const generateImage = () => {
   const obj = {
     req_key: 'high_aes_general_v21_L',
     model_version: 'general_v2.1_L',
@@ -65,7 +65,7 @@ const TestApi = () => {
     // logo_info: false
   }
 
-  ajax.post('?Action=CVProcess&Version=2022-08-31', obj).then(res => {
+  ajax.post('/ai', obj).then(res => {
     console.log(res);
   });
 };
