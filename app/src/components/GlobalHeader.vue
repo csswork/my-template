@@ -1,8 +1,8 @@
 <template>
-  <el-page-header icon="Back" class="global-header">
+  <el-page-header :icon="back_icon" class="global-header" :title="back_text" @back="goBack">
     <template #content>
       <div class="flex">
-        <span v-if="heading" class="page-title"> {{ heading }} </span>
+        <span v-if="title" class="page-title"> {{ title }} </span>
       </div>
     </template>
     <template #extra>
@@ -43,14 +43,52 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
+
+const route = useRoute();
+const router = useRouter();
+const title = ref('');
 
 const props = defineProps({
   heading: {
     type: String,
-    required: true,
-    default: '首页',
+    default: '',
   },
+
+  back_text: {
+    type: String,
+    default: '返回',
+  },
+
+  back_func: {
+    type: Function,
+    default: false,
+  },
+
+  back_icon: {
+    type: String,
+    default: 'Back',
+  },
+});
+
+const goBack = () => {
+  if (props.back_func) {
+    props.back_func();
+    return;
+  }
+
+  router.go(-1);
+};
+
+onMounted(() => {
+  if (props.heading) {
+    title.value = props.heading;
+  } else {
+    title.value = route.meta.heading;
+  }
+
+  console.log('title', title.value);
 });
 
 </script>

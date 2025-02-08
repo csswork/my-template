@@ -7,8 +7,22 @@
 </template>
 
 <script setup>
-// import { watch, onMounted, onBeforeUnmount, ref } from 'vue';
+import { watch, onMounted } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
 import AiImage from './components/AiImage.vue';
+
+const route = useRoute();
+
+watch(() => route.name, () => {
+  // update body class
+  document.body.className = 'page-' + route.name;
+});
+
+onMounted(() => {
+  // update body class
+  document.body.className = 'page-' + route.name;
+});
+
 </script>
 
 <style lang="scss">
@@ -233,6 +247,13 @@ body {
 
   &.disabled-scroll {
     overflow: hidden !important;
+  }
+
+  &.page-home {
+    .ui-main > .global-header .ui-page-header__left {
+      opacity: 0;
+      pointer-events: none;
+    }
   }
 }
 
