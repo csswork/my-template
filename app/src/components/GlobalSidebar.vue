@@ -11,7 +11,8 @@
         <li v-for="(menu, index) in menus" :key="index" :class="['menu-item', 'menu-type-' + menu.type, { 'active': route.meta === menu.meta }]">
           <template v-if="menu.type === 'link'">
             <router-link :to="menu.path" @click="openSubMenu(menu, $event)">
-              <component :is="menu.icon" />
+              <Home v-if="menu.icon === 'Home'" theme="outline" size="16" :strokeWidth="2.8" />
+              <component v-else :is="menu.icon" />
               <span>{{ menu.name }}</span>
             </router-link>
           </template>
@@ -49,6 +50,7 @@ import { ref, defineAsyncComponent, onMounted } from 'vue';
 import { useGlobalStore } from '@/stores/Global';
 import { useRouter } from 'vue-router';
 import event from '@/utils/EventBus';
+import { Home } from '@icon-park/vue-next';
 // import { Service } from '@element-plus/icons-vue';
 
 const router = useRouter();
@@ -60,7 +62,7 @@ const menus = ref([
 {
     name: '首页',
     type: 'link',
-    icon: 'HomeFilled',
+    icon: 'Home',
     path: '/',
     meta: 'home'
   },
@@ -238,6 +240,21 @@ onMounted(() => {
             flex: 1;
             overflow: hidden;
             white-space: nowrap;
+          }
+
+          .i-icon {
+            width: 16px;
+            height: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex: unset;
+            margin-right: 10px;
+
+            svg {
+              width: 100%;
+              height: 100%;
+            }
           }
 
           i {

@@ -217,7 +217,7 @@ onMounted(() => {
 
   --register_max_width: 550px;
   --Radius: 6px;
-  --Radius-smal: 4px;
+  --Radius-small: 4px;
   --Radius-large: 8px;
   --Radius-circle: 50%;
   --Radius-pill: 9999px;

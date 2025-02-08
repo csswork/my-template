@@ -192,6 +192,18 @@
   }
 }
 
+.ui-slider {
+  --ui-slider-main-bg-color: var(--Neu-100);
+  --ui-slider-runway-bg-color: var(--ui-border-color-light);
+  --ui-slider-stop-bg-color: var(--ui-color-white);
+  --ui-slider-disabled-color: var(--ui-text-color-placeholder);
+  --ui-slider-border-radius: 3px;
+  --ui-slider-height: 4px;
+  --ui-slider-button-size: 12px;
+  --ui-slider-button-wrapper-size: 20px;
+  --ui-slider-button-wrapper-offset: -8px;
+}
+
 .ui-checkbox {
   white-space: normal;
   align-items: flex-start;
