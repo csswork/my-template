@@ -3,11 +3,13 @@ import vue from '@vitejs/plugin-vue';
 import path from 'path';
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons';
 import { manualChunksPlugin } from 'vite-plugin-webpackchunkname';
+import { viteRequire } from 'vite-require'
 
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [
     vue(),
+    viteRequire(),
     manualChunksPlugin(),
     createSvgIconsPlugin({
       iconDirs: [path.resolve(process.cwd(), 'src/assets/svg')], // svg file directory
