@@ -4,12 +4,41 @@ const routes = [
   {
     path: '/',
     name: 'home',
-    component: () => import(/* webpackChunkName: "home" */ '../views/Home.vue'),
+    component: () => import(/* webpackChunkName: "home" */ '../views/HomePage.vue'),
     meta: {
-      heading: 'Home',
+      heading: '首页',
       requiresAuth: true
     }
   },
+  {
+    path: '/explore',
+    name: 'explore',
+    component: () => import(/* webpackChunkName: "explore" */ '../views/ExplorePage.vue'),
+    meta: {
+      heading: '探索',
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/personal',
+    name: 'personal',
+    component: () => import(/* webpackChunkName: "personal" */ '../views/PersonalPage.vue'),
+    meta: {
+      heading: '个人主页',
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/asset',
+    name: 'asset',
+    component: () => import(/* webpackChunkName: "asset" */ '../views/AssetPage.vue'),
+    meta: {
+      heading: '资产',
+      requiresAuth: true
+    }
+  },
+  
+
 ];
 
 let base_url = '/';
@@ -18,30 +47,5 @@ const router = createRouter({
   history: createWebHistory(base_url),
   routes
 });
-
-// router.beforeEach((to, from, next) => {
-//   const token = window.localStorage.getItem('token');
-//   const redirectPath = window.localStorage.getItem('redirectPath');
-
-//   if (to.matched.some(record => record.meta.requiresAuth)) {
-//     if (!token) {
-//       window.localStorage.setItem('redirectPath', to.fullPath);
-//       next({ path: '/login' });
-//     } else {
-//       next();
-//     }
-//   } 
-//   else if( to.matched.some(record => record.meta.login) ){ 
-//     // 已登錄要自動轉home page(註冊頁註冊一半會拿到token,另外處理)
-//     if (token) {
-//       next({ path:  redirectPath || '/' });
-//     } else {
-//       next();
-//     }
-//   } 
-//   else {
-//     next();
-//   }
-// });
 
 export default router;
