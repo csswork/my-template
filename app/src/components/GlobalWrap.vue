@@ -2,6 +2,7 @@
   <el-container>
     <global-sidebar />
     <el-main class="main-content">
+      
       <slot />
     </el-main>
   </el-container>

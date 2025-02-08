@@ -15,47 +15,54 @@ import AiImage from './components/AiImage.vue';
 @use '@/assets/scss/reset';
 
 :root {
-  --font: "PingFang SC", "hiragino sans gb", "microsoft yahei ui", "microsoft yahei", "simsun", arial, sans-serif;
+  // --font: "PingFang SC", "hiragino sans gb", "microsoft yahei ui", "microsoft yahei", "simsun", arial, sans-serif;
+  --font: Inter, -apple-system, "system-ui", "Segoe UI", "SF Pro SC", "SF Pro Display", "SF Pro Icons", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
 
-  --PB-100: #CC4900;
-  --PB-90: #FF5B00;
-  --PB-80: #FF6B1A;
-  --PB-70: #FF8033;
-  --PB-60: #FF9966;
-  --PB-50: #FFB085;
-  --PB-40: #FFC7A8;
-  --PB-30: #FFE0D1;
-  --PB-20: #FFF2EB;
-  --PB-10: #FFF9F5;
+  --PB-100: #003ECC;
+  --PB-90: #0057FF;
+  --PB-80: #4D68FF;
+  --PB-70: #667FFF;
+  --PB-60: #8095FF;
+  --PB-50: #99ACFF;
+  --PB-40: #B3C4FF;
+  --PB-30: #CCDBFF;
+  --PB-20: #E6EFFF;
+  --PB-10: #F5F8FF;
 
   --Brand-Primary: var(--PB-80);
   --Brand-Orange: var(--PB-60);
   --Brand-purple: #7e86bf;
   --Brand-grey: #efefef;
 
-  --Red-10: #FFEBED;
-  --Red-20: #FF3D57;
-  --Red-30: #CC3045;
+  --Red-10: #FFEBEE;
+  --Red-20: #FF5252;
+  --Red-30: #CC0000;
   --Yellow-10: #FFF5E6;
   --Yellow-20: #FFAA00;
   --Yellow-30: #CC8800;
-  --Blue-10: #d3e1fe;
-  --Blue-20: #4d8cf5;
-  --Blue-30: #007bff;
-  --Green-10: #E6F9F3;
-  --Green-20: #00C896;
-  --Green-30: #009D73;
+  --Blue-10: var(--PB-10);
+  --Blue-20: var(--PB-50);
+  --Blue-30: var(--PB-90);
+  --Green-10: #E6F5ED;
+  --Green-20: #00C853;
+  --Green-30: #009E40;
+  --Orange-10: #FFF4E6;
+  --Orange-20: #FFA726;
+  --Orange-30: #CC8600;
+  --Violet-10: #F3E5F5;
+  --Violet-20: #9C27B0;
+  --Violet-30: #6A1B9A;
 
   --Black-100: #000000;
-  --Black-90: #333333;
+  --Black-90: #1a1a1a;
   --Black-75: #58595b;
   --Black-60: #666666;
-  --Black-50: #828282;
+  --Black-50: #8C8C8C;
   --Black-40: #bdbdbd;
   --Black-20: #e0e0e0;
   --Black-10: #e5e5e5;
   --Black-05: #f2f2f2;
-  --Black-03: #fafafa;
+  --Black-03: #F8F9FC;
   --Black-00: #fff;
 
   --Black-100-rgba: 0, 0, 0;
@@ -63,17 +70,29 @@ import AiImage from './components/AiImage.vue';
   --Black-50-rgba: 130, 130, 130;
   --Black-00-rgba: 255, 255, 255;
 
-  --Neu-00: #FFFFFF;
-  --Neu-10: #FFF8F2;
-  --Neu-20: #FBE9E0;
-  --Neu-30: #F3D5C8;
-  --Neu-40: #E8C0AD;
-  --Neu-50: #D8A58C;
-  --Neu-60: #C48F75;
-  --Neu-70: #B0775E;
-  --Neu-80: #9D624A;
-  --Neu-90: #804D38;
-  --Neu-100: #663726;
+  --Neu-00: #fff;
+  --Neu-10: #F1F5FA;
+  --Neu-20: #E4EBF5;
+  --Neu-30: #D1DBF0;
+  --Neu-40: #BDCBEA;
+  --Neu-50: #A4B7E1;
+  --Neu-60: #8EA5D7;
+  --Neu-70: #7893CC;
+  --Neu-80: #5E7FBF;
+  --Neu-90: #4A6FAD;
+  --Neu-100: #335F99;
+
+  // --Neu-00: #fff;
+  // --Neu-10: #F4F6F8;
+  // --Neu-20: #E9ECEF;
+  // --Neu-30: #D8DDE2;
+  // --Neu-40: #C2C8CF;
+  // --Neu-50: #ABB5BD;
+  // --Neu-60: #94A2AC;
+  // --Neu-70: #7D8D9C;
+  // --Neu-80: #66788B;
+  // --Neu-90: #505F78;
+  // --Neu-100: #3A4E66;
 
   --Text-brand: var(--PB-80);
   --Text-primary: var(--Black-90);
@@ -90,7 +109,7 @@ import AiImage from './components/AiImage.vue';
   --Border-secondary: var(--Brand-Orange);
   --Border-dark: var(--Black-90);
   --Border-light: var(--Black-00);
-  --Border-default: var(--Black-10);
+  --Border-default: var(--Black-20);
   --Border-hover: var(--Black-10);
   --Border-disable: var(--Black-20);
   --Border-neu: var(--Neu-40);
@@ -169,11 +188,6 @@ import AiImage from './components/AiImage.vue';
   --font-lh-xs: 14px;
   --font-lh-xxs: 12px;
 
-  --font-semi: 600;
-  --font-medium: 500;
-  --font-regular: 400;
-  --font-light: 300;
-
   --spacing-01: 2px;
   --spacing-02: 4px;
   --spacing-03: 8px;
@@ -249,6 +263,5 @@ a {
 .main-content {
   background-color: var(--Bg-light);
   height: 100vh;
-  box-shadow: var(--card);
 }
 </style>

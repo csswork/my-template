@@ -20,7 +20,7 @@
 
   --ui-border-radius-base: 6px;
   --ui-font-weight-primary: 400;
-  --ui-aside-width: 160px;
+  --ui-aside-width: 280px;
 }
 
 // button
@@ -113,7 +113,6 @@
     position: relative;
 
     .ui-form-item__label-wrap {
-      font: var(--medium-14);
       color: var(--Text-primary);
     }
 

@@ -1,47 +1,9 @@
 <template>
-  <el-aside class="global-sidebar" ref="sidebar" :class="{ 'collapsed': isCollapsed }">
     <header>
       <h1 class="logo">
         <strong>壹图网</strong><sup>{AI}</sup>
       </h1>
     </header>
-
-    <nav>
-      <ul>
-        <li v-for="(menu, index) in menus" :key="index" :class="['menu-item', 'menu-type-' + menu.type, { 'active': route.meta === menu.meta }]">
-          <template v-if="menu.type === 'link'">
-            <router-link :to="menu.path" @click="openSubMenu(menu, $event)">
-              <component :is="menu.icon" />
-              <span>{{ menu.name }}</span>
-            </router-link>
-          </template>
-
-          <template v-else-if="menu.type === 'fun'">
-            <span @click="menu.cb">
-              <component :is="menu.icon" />
-              <span>{{ menu.name }}</span>
-            </span>
-          </template>
-
-          <template v-else-if="menu.type === 'hr'">
-            <hr>
-          </template>
-        </li>
-      </ul>
-
-    </nav>
-
-    <footer>
-      <ul>
-        <li>许可证号：<a href="http://beian.miit.gov.cn" target="_blank">京ICP备2020035747号-2</a></li>
-        <li>京网文：〔2024〕0713-035号</li>
-        <li>增值电信业务许可证：京B2-20221210</li>
-        <li>网信算备：110115311070301240019号</li>
-        <li>京公网安备：<a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=11011502003620" target="_blank">11011502003620号</a></li>
-      </ul>
-      <p>©{{ new Date().getFullYear() }} 壹图网版权所有。</p>
-    </footer>
-  </el-aside>
 </template>
 
 <script setup>
@@ -287,30 +249,84 @@ onMounted(() => {
 
   footer {
     padding: 16px;
-    font-size: 12px;
 
-    a {
-      color: var(--Text-default);
-      text-decoration: none;
-
-      &:hover {
-        color: var(--Text-link);
-        text-decoration: underline;
-      }
-    }
-
-    ul {
+    .info {
+      display: flex;
+      align-items: center;
+      padding: 16px 0;
 
       & > li {
-        color: var(--Text-default);
-        margin-top: 2px;
+        margin-right: 16px;
+
+        span {
+          display: block;
+          border: 2px solid var(--Black-75);
+        }
+
+        a {
+          color: var(--Text-default);
+          text-decoration: none;
+          height: 34px;
+          width: 34px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 50%;
+          transition: all 0.2s ease;
+
+          svg {
+            width: 20px;
+            height: 20px;
+          }
+
+          &:hover {
+            background-color: var(--Neu-30);
+          }
+        }
       }
 
+    }
+
+    .links {
+      display: flex;
+      flex-wrap: wrap;
+
+      & > li {
+        width: 50%;
+
+        a {
+          color: var(--Text-default);
+          text-decoration: none;
+          transition: all 0.2s ease;
+          font: var(--book-12);
+
+          &:hover {
+            color: var(--Text-link);
+          }
+        }
+      }
     }
 
     & > p {
-      padding: 16px 0 0;
+      padding: 12px 0 0;
       color: var(--Text-default);
+      font: var(--book-12);
+
+      a {
+        color: var(--Text-default);
+        text-decoration: none;
+        transition: all 0.2s ease;
+
+        &:hover {
+          color: var(--Text-link);
+        }
+      }
+    }
+  }
+
+  .ui-popper {
+    .ui-button {
+      justify-content: flex-start;
     }
   }
 
@@ -401,10 +417,43 @@ onMounted(() => {
             }
           }
         }
+
+        .sub-menu {
+          display: none;
+        }
       }
 
       & > footer {
-        display: none;
+        padding: 16px;
+
+        .info {
+          padding: 16px 0;
+          width: 34px;
+          flex-wrap: wrap;
+
+          & > li {
+            margin: 0;
+
+            &:nth-child(1) {
+              order: 3;
+              margin-top: 12px;
+            }
+
+            &:nth-child(2) {
+              order: 2;
+              margin-top: 6px;
+            }
+
+            &:nth-child(3) {
+              order: 1;
+            }
+          }
+        }
+
+        .links,
+        & > p {
+          display: none;
+        }
       }
 
     }
