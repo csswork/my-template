@@ -104,6 +104,7 @@ import AiImage from './components/AiImage.vue';
   --Text-warning: var(--Yellow-30);
   --Text-safe: var(--Green-30);
   --Text-link: var(--Blue-30);
+  --Text-light: var(--Black-00);
 
   --Border-primary: var(--PB-80);
   --Border-secondary: var(--Brand-Orange);
@@ -201,7 +202,12 @@ import AiImage from './components/AiImage.vue';
   --spacing-11: 64px;
 
   --register_max_width: 550px;
-  --radius: 6px;
+  --Radius: 6px;
+  --Radius-smal: 4px;
+  --Radius-large: 8px;
+  --Radius-circle: 50%;
+  --Radius-pill: 9999px;
+  --Radius-0: 0;
 }
 
 html {

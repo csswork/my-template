@@ -204,7 +204,7 @@ onMounted(() => {
           display: flex;
           align-items: center;
           padding: 0 12px;
-          border-radius: var(--radius);
+          border-radius: var(--Radius);
           transition: var(--sidebar-collapse-transition);
           color: var(--Text-secondary);
           text-decoration: none;
@@ -244,7 +244,7 @@ onMounted(() => {
             height: 20px;
             width: 20px;
             cursor: pointer;
-            border-radius: var(--radius);
+            border-radius: var(--Radius);
             transition: var(--sidebar-collapse-transition);
             color: var(--Black-40);
             display: flex;

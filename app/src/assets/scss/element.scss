@@ -17,8 +17,7 @@
   --ui-color-danger: var(--Red-30);
 
   --ui-text-color-placeholder: var(--Neu-40);
-
-  --ui-border-radius-base: 6px;
+  --ui-border-radius-base: var(--Radius);
   --ui-font-weight-primary: 400;
   --ui-aside-width: 280px;
 }
@@ -37,6 +36,20 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
+
+  &--primary {
+    --ui-button-text-color: var(--Text-light);
+    --ui-button-bg-color: var(--PB-80);
+    --ui-button-border-color: var(--PB-80);
+    --ui-button-outline-color: var(--PB-80);
+    --ui-button-active-color: var(--Text-light);
+    --ui-button-hover-text-color: var(--Text-light);
+    --ui-button-hover-link-text-color: var(--Text-light);
+    --ui-button-hover-bg-color: var(--PB-90);
+    --ui-button-hover-border-color: var(--PB-90);
+    --ui-button-active-bg-color: var(--PB-100);
+    --ui-button-active-border-color: var(--PB-100);
+  }
 
   .svg-icon {
     width: 12px;
@@ -104,6 +117,17 @@
   --ui-drawer-padding-primary: 0px;
 }
 
+
+.ui-popover {
+  --ui-popover-bg-color: var(--Bg-light);
+  --ui-popover-border-color: var(--Border-default);
+  --ui-popover-padding: 12px;
+  --ui-popover-padding-large: 16px;
+  --ui-popover-font-size: 14px;
+  --ui-popover-border-radius: var(--Radius-large);
+  --ui-popover-title-text-color: var(--Text-primary);
+  --ui-popover-title-font-size: 16px;
+}
 
 //form
 .ui-form {
