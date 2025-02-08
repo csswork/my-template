@@ -14,121 +14,146 @@
         <el-container>
           <el-aside width="420px">
             <div class="col">
-              <div class="form-item">
-                <h3>图片生成</h3>
-                <el-input
-                  v-model="data.prompt"
-                  :rows="6"
-                  type="textarea"
-                  placeholder="描述你想生成的图片，如：做一张插画风格的“新年”海报"
-                  maxlength="600"
-                  show-word-limit
-                />
-              </div>
-              <el-collapse v-model="active_names">
-                <el-collapse-item name="1">
-                  <template #title>
-                    <h3>模型参数</h3>
-                  </template>
-                  <h4 class="sub-title">选择模型</h4>
-                  <el-popover
-                    placement="right"
-                    trigger="click"
-                    ref="model_popover"
-                    :width="320"
-                    popper-class="select-model"
-                    popper-style="box-shadow: rgb(14 18 22 / 35%) 0px 10px 38px -10px, rgb(14 18 22 / 20%) 0px 10px 20px -15px; padding: 20px;"
-                  >
-                    <ul class="model-list">
-                      <li v-for="model in models" :key="model.label" @click="selectModel(model)" :class="{ 'selected': model.selected }">
-                        <img :src="model.image" alt="model" />
-                        <div>
-                          <h4>{{ model.label }} <CircleCheck v-if="model.selected" /></h4>
-                          <p>{{ model.desc }}</p>
+              <div class="tools">
+                <div class="form-item">
+                  <h3>图片生成</h3>
+                  <el-input
+                    v-model="data.prompt"
+                    :rows="6"
+                    type="textarea"
+                    placeholder="描述你想生成的图片，如：做一张插画风格的“新年”海报"
+                    maxlength="600"
+                    show-word-limit
+                  />
+                </div>
+                <el-collapse v-model="active_names">
+                  <el-collapse-item name="1">
+                    <template #title>
+                      <h3>模型参数</h3>
+                    </template>
+                    <h4 class="sub-title">选择模型</h4>
+                    <el-popover
+                      placement="right"
+                      trigger="click"
+                      ref="model_popover"
+                      :width="320"
+                      popper-class="select-model"
+                      popper-style="box-shadow: rgb(14 18 22 / 35%) 0px 10px 38px -10px, rgb(14 18 22 / 20%) 0px 10px 20px -15px; padding: 20px;"
+                    >
+                      <ul class="model-list">
+                        <li v-for="model in models" :key="model.label" @click="selectModel(model)" :class="{ 'selected': model.selected }">
+                          <img :src="model.image" alt="model" />
+                          <div>
+                            <h4>{{ model.label }} <CircleCheck v-if="model.selected" /></h4>
+                            <p>{{ model.desc }}</p>
+                          </div>
+                        </li>
+                      </ul>
+                      <template #reference>
+                        <div class="selected-model">
+                          <img :src="selected_model.image" alt="model" />
+                          <div>
+                            <h4>{{ selected_model.label }}</h4>
+                            <p>{{ selected_model.desc }}</p>
+                          </div>
+                          <SettingConfig theme="outline" size="16" :strokeWidth="2.8" />
                         </div>
+                      </template>
+                    </el-popover>
+                    <div class="form-item">
+                      <h4 class="sub-title" style="margin-bottom: 0;">
+                        精细度
+                        <el-tooltip content="数值越大，效果越好，生成的速度越慢。" placement="top" effect="light">
+                          <Help theme="outline" size="14" :strokeWidth="2.8"/>
+                        </el-tooltip>
+                      </h4>
+                      <div class="slider-wrap">
+                        <el-slider v-model="data.scale" :min="1" :max="10" :step="1" />
+                        <span class="count">{{ data.scale }}</span>
+                      </div>
+                    </div>
+                  </el-collapse-item>
+                  <el-collapse-item name="2">
+                    <template #title>
+                      <h3>比例尺寸</h3>
+                    </template>
+                    <h4 class="sub-title">选择比例</h4>
+                    <ul class="ratio-list">
+                      <li
+                        v-for="ratio in ratios"
+                        :key="ratio.label"
+                        :class="{ 'selected': ratio.active }"
+                        @click="selectRatio(ratio)"
+                      >
+                        <i :class="['ratio-' + ratio.label.replace(':', '-')]"></i>
+                        {{ ratio.label }}
                       </li>
                     </ul>
-                    <template #reference>
-                      <div class="selected-model">
-                        <img :src="selected_model.image" alt="model" />
-                        <div>
-                          <h4>{{ selected_model.label }}</h4>
-                          <p>{{ selected_model.desc }}</p>
-                        </div>
-                        <SettingConfig theme="outline" size="16" :strokeWidth="2.8" />
-                      </div>
-                    </template>
-                  </el-popover>
-                  <div class="form-item">
-                    <h4 class="sub-title" style="margin-bottom: 0;">
-                      精细度
-                      <el-tooltip content="数值越大，效果越好，生成的速度越慢。" placement="top" effect="light">
-                        <Help theme="outline" size="14" :strokeWidth="2.8"/>
-                      </el-tooltip>
-                    </h4>
-                    <div class="slider-wrap">
-                      <el-slider v-model="data.scale" :min="1" :max="10" :step="1" />
-                      <span class="count">{{ data.scale }}</span>
-                    </div>
-                  </div>
-                </el-collapse-item>
-                <el-collapse-item name="2">
-                  <template #title>
-                    <h3>比例尺寸</h3>
-                  </template>
-                  <h4 class="sub-title">选择比例</h4>
-                  <ul class="ratio-list">
-                    <li
-                      v-for="ratio in ratios"
-                      :key="ratio.label"
-                      :class="{ 'selected': ratio.active }"
-                      @click="selectRatio(ratio)"
-                    >
-                      <i :class="['ratio-' + ratio.label.replace(':', '-')]"></i>
-                      {{ ratio.label }}
-                    </li>
-                  </ul>
-                  <div class="form-item">
-                    <h4 class="sub-title" style="margin-bottom: 0;">
-                      尺寸
-                      <el-tooltip content="尺寸越大，效果越好，生成的速度越慢。" placement="top" effect="light">
-                        <Help theme="outline" size="14" :strokeWidth="2.8"/>
-                      </el-tooltip>
-                    </h4>
-                    <el-form-item>
-                      <el-col :span="11">
-                        <el-input v-model="data.width" 
-                        @blur="() => { if (data.width < 512) data.width = 512; }"
-                        :formatter="(value) => `${value}`" 
-                        :parser="(value) => {
-                          const parsed = value.replace(/[^0-9]/g, '');
-                          let num = parseInt(parsed);
-                          if (num > 1024) num = 1024;
-                          return num ? num.toString() : '';
-                        }"
-                        />
-                      </el-col>
-                      <el-col class="text-center" :span="2">-</el-col>
-                      <el-col :span="11">
-                        <el-input v-model="data.height" 
-                          @blur="() => { if (data.height < 512) data.height = 512; }"
+                    <div class="form-item">
+                      <h4 class="sub-title" style="margin-bottom: 0;">
+                        尺寸
+                        <el-tooltip content="尺寸越大，效果越好，生成的速度越慢。" placement="top" effect="light">
+                          <Help theme="outline" size="14" :strokeWidth="2.8"/>
+                        </el-tooltip>
+                      </h4>
+                      <el-form-item>
+                        <el-col :span="11">
+                          <el-input v-model="data.width" 
+                          @blur="() => { if (data.width < 512) data.width = 512; }"
                           :formatter="(value) => `${value}`" 
                           :parser="(value) => {
                             const parsed = value.replace(/[^0-9]/g, '');
                             let num = parseInt(parsed);
-                            if (num > 1024) num = 1024;
+                            if (num > 1360) num = 1360;
                             return num ? num.toString() : '';
                           }"
                           />
-                      </el-col>
-                    </el-form-item>
-                  </div>
+                        </el-col>
+                        <el-col class="text-center" :span="2">-</el-col>
+                        <el-col :span="11">
+                          <el-input v-model="data.height" 
+                            @blur="() => { if (data.height < 512) data.height = 512; }"
+                            :formatter="(value) => `${value}`" 
+                            :parser="(value) => {
+                              const parsed = value.replace(/[^0-9]/g, '');
+                              let num = parseInt(parsed);
+                              if (num > 1360) num = 1360;
+                              return num ? num.toString() : '';
+                            }"
+                            />
+                        </el-col>
+                      </el-form-item>
+                    </div>
 
-                </el-collapse-item>
-              </el-collapse>
+                  </el-collapse-item>
+                </el-collapse>
+              </div>
+              <footer class="submit-btn">
+                <el-button type="primary" size="large" @click="generateImage" :loading="is_loading" :disabled="is_can_submit">
+                  {{ is_loading ? '生成中...' : '生成图片' }}
+                </el-button>
+              </footer>
             </div>
+
+     
           </el-aside>
-          <el-main>Main</el-main>
+          <el-main>
+            <el-skeleton :loading="is_loading" animated>
+              <template #template>
+                <figure class="image-wrap" :style="{ width: image_width + 'px', height: image_height + 'px' }">
+                  <el-skeleton-item variant="image" />
+                </figure>
+              </template>
+              <template #default>
+                <figure v-if="images.length !== 0" class="image-wrap" :style="{ width: image_width + 'px', height: image_height + 'px' }">
+                  <img
+                    src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png"
+                    class="image"
+                  />
+                </figure>
+              </template>
+            </el-skeleton>
+          </el-main>
         </el-container>
       </el-container>
     </el-drawer>
@@ -168,8 +193,13 @@
     return_img: true,
   });
 
+  const size = 480;
+  const is_loading = ref(false);
+  const images = ref([]);
+  const image_width = ref(size);
+  const image_height = ref(size);
   const model_popover = ref(null);
-  const active_names = ref(['1', '2', '3']);
+  const active_names = ref(['1', '2']);
   const models = ref([
     { 
       label: '图片2.1', 
@@ -249,8 +279,8 @@
     return models.value.find(item => item.selected);
   });
 
-  const selected_ratio = computed(() => {
-    return ratios.value.find(item => item.active);
+  const is_can_submit = computed(() => {
+    return (data.value.prompt && data.value.width && data.value.height) ? false : true;
   });
 
   const selectRatio = (ratio) => {
@@ -258,21 +288,33 @@
       item.active = false;
     });
 
-    // set width and height by ratio
     if (ratio.value === 1) {
-      data.width = 512;
-      data.height = 512;
+      data.value.width = 512;
+      data.value.height = 512;
     } else if (ratio.value > 1) {
-      data.width = 1024;
-      data.height = Math.floor(1024 / ratio.value);
-      console.log((1024 / ratio.value));
+      data.value.width = 1024;
+      data.value.height = Math.floor(1024 / ratio.value);
     } else {
-      data.width = Math.floor(1024 * ratio.value);
-      data.height = 1024;
-      console.log((1024 / ratio.value));
+      data.value.width = Math.floor(1024 * ratio.value);
+      data.value.height = 1024;
     }
 
     ratio.active = true;
+
+    // image_width.value = data.value.width;
+    // image_height.value = data.value.height;
+
+    // image max size 600
+    if (ratio.value === 1) {
+      image_width.value = size;
+      image_height.value = size;
+    } else if (ratio.value > 1) {
+      image_width.value = size;
+      image_height.value = Math.floor(size / ratio.value);
+    } else {
+      image_height.value = size;
+      image_width.value = Math.floor(size * ratio.value);
+    }
   };
 
   const selectModel = (model) => {
@@ -282,6 +324,21 @@
 
     model.selected = true;
     model_popover.value.hide();
+  };
+
+  const generateImage = () => {
+    is_loading.value = true;
+
+    setTimeout(() => {
+      is_loading.value = false;
+      images.value = [
+        'https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png',
+      ];
+    }, 2000);
+    // ajax.post('/ai', data.value).then(res => {
+    //   console.log(res);
+    //   is_loading.value = false;
+    // });
   };
 
 
@@ -336,10 +393,25 @@
       padding: 0 24px 24px;
 
       .col {
-        border: 1px solid rgba(0, 0, 0, 0.08);
+        border: 1px solid var(--ui-border-color);
         border-radius: var(--Radius-large);
         background-color: var(--Bg-01);
         height: 100%;
+        display: grid;
+        grid-template-rows: 1fr auto;
+        overflow: hidden;
+
+        .tools {
+          overflow-y: auto;
+          height: 100%;
+
+          & > .form-item {
+            border-bottom: 1px solid var(--Border-default);
+            margin: 0;
+            padding: 16px;
+            padding-bottom: 16px;
+          }
+        }
       }
 
       .form-item {
@@ -353,11 +425,16 @@
       }
 
       .ui-collapse {
-        margin: 0 16px;
         border: none;
 
         .ui-collapse-item {
           margin: 16px 0;
+          padding: 0 16px 16px;
+          border-bottom: 1px solid var(--Border-default);
+
+          &:last-child {
+            border-bottom: none;
+          }
         }
 
         .form-item {
@@ -400,7 +477,7 @@
       .selected-model {
         display: flex;
         align-items: center;
-        border: 1px solid rgba(0, 0, 0, 0.08);
+        border: 1px solid var(--ui-border-color);
         border-radius: var(--Radius);
         background-color: var(--Bg-light);
         padding-right: 16px;
@@ -464,14 +541,87 @@
           color: var(--Text-secondary);
         }
       }
+
+
+      .ui-form-item {
+        text-align: center;
+
+        .ui-input__inner {
+          text-align: center;
+        }
+      }
+
+      .submit-btn {
+        padding: 16px;
+        text-align: center;
+        border-top: 1px solid var(--ui-border-color);
+        background-color: var(--Bg-01);
+
+        .ui-button {
+          height: 44px;
+          width: 100%;
+          background: linear-gradient(125deg, var(--Neu-70) 0%, var(--Violet-20) 100%);
+          border: none;
+
+          &:hover {
+            background: linear-gradient(125deg, var(--Neu-80) 0%, var(--Violet-30) 100%);
+          }
+          
+          &[aria-disabled="true"] {
+            background: var(--Neu-20);
+            color: var(--Text-disabled);
+          }
+        }
+      }
+    }
+    
+    & > .ui-container {
+      height: calc(100vh - 64px);
     }
 
-    .ui-form-item {
-      text-align: center;
 
-      .ui-input__inner {
-        text-align: center;
+    .ui-main {
+      margin-right: 24px;
+      margin-bottom: 24px;
+      background-color: var(--Bg-01);
+      border-radius: var(--Radius-large);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+
+      .ui-skeleton {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        padding: 0 0 100%;
+        height: 0;
+
+
       }
+
+
+      .image-wrap {
+        position: absolute;
+        width: calc(100% - 36px);
+        height: calc(100% - 36px);
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: red;
+
+        img,
+        .ui-skeleton__item {
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          top: 0;
+          left: 0;
+          object-fit: cover;
+        }
+      }
+
     }
   }
 
@@ -555,7 +705,7 @@
       border-radius: var(--Radius);
       background-color: var(--Bg-light);
       color: var(--Text-primary);
-      border: 1px solid rgba(0, 0, 0, 0.08);
+      border: 1px solid var(--ui-border-color);
       text-align: center;
       padding: 6px;
 

@@ -122,9 +122,9 @@ onMounted(() => {
 
   --Border-primary: var(--PB-80);
   --Border-secondary: var(--Brand-Orange);
-  --Border-dark: var(--Black-90);
-  --Border-light: var(--Black-00);
-  --Border-default: var(--Black-20);
+  --Border-dark: #d4d7de;
+  --Border-light: #ebeef5;
+  --Border-default: #dcdfe6;
   --Border-hover: var(--Black-10);
   --Border-disable: var(--Black-20);
   --Border-neu: var(--Neu-40);

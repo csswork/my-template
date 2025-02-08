@@ -33,7 +33,7 @@
           <template #reference>
             <el-avatar
                 :size="32"
-                src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
+                :src="user_avatar"
                 />
           </template>
         </el-popover>
@@ -72,6 +72,8 @@ const props = defineProps({
   },
 });
 
+const user_avatar = require('@/assets/images/user.png');
+
 const goBack = () => {
   if (props.back_func) {
     props.back_func();
@@ -108,6 +110,12 @@ onMounted(() => {
 
         .ui-button {
             margin-right: 12px;
+            // background: linear-gradient(45deg, var(--Neu-70) 0%, var(--Neu-90) 20%, var(--Violet-20) 80%, var(--Violet-30) 100%);
+            // border: none;
+
+            // &:hover {
+            //   background: linear-gradient(25deg, var(--Neu-70) 0%, var(--Neu-90) 20%, var(--Violet-20) 80%, var(--Violet-30) 100%);
+            // }
         }
     }
 
