@@ -17,14 +17,28 @@
               <div class="tools">
                 <div class="form-item">
                   <h3>图片生成</h3>
-                  <el-input
-                    v-model="data.prompt"
-                    :rows="6"
-                    type="textarea"
-                    placeholder="描述你想生成的图片，如：做一张插画风格的“新年”海报"
-                    maxlength="600"
-                    show-word-limit
-                  />
+                  <div class="input-wrap">
+                    <el-input
+                      v-model="data.prompt"
+                      :rows="6"
+                      type="textarea"
+                      placeholder="描述你想生成的图片，如：做一张插画风格的“新年”海报"
+                      maxlength="600"
+                      show-word-limit
+                    />
+                    <el-button type="primary" size="small" v-if="!upload_image">
+                      <input type="file" accept="image/*" ref="upload_el" @change="changeImage" />
+                      <UploadPicture theme="outline" size="12" :strokeWidth="3"/>
+                      导入参考图
+                    </el-button>
+                    <div class="upload-image" v-if="upload_image">
+                      <img :src="upload_image" alt="upload" />
+                      <span>
+                        删除 <el-icon @click="upload_image = ''"><CloseBold /></el-icon>
+                      </span>
+                    </div>
+                  </div>
+
                 </div>
                 <el-collapse v-model="active_names">
                   <el-collapse-item name="1">
@@ -41,7 +55,7 @@
                       popper-style="box-shadow: rgb(14 18 22 / 35%) 0px 10px 38px -10px, rgb(14 18 22 / 20%) 0px 10px 20px -15px; padding: 20px;"
                     >
                       <ul class="model-list">
-                        <li v-for="model in models" :key="model.label" @click="selectModel(model)" :class="{ 'selected': model.selected }">
+                        <li v-for="model in models" :key="model.label" @click="selectModel(model)" :class="[{ 'selected': model.selected }, { 'disabled': upload_image && !model.selected }]">
                           <img :src="model.image" alt="model" />
                           <div>
                             <h4>{{ model.label }} <CircleCheck v-if="model.selected" /></h4>
@@ -146,10 +160,7 @@
               </template>
               <template #default>
                 <figure v-if="images.length !== 0" class="image-wrap" :style="{ width: image_width + 'px', height: image_height + 'px' }">
-                  <img
-                    src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png"
-                    class="image"
-                  />
+                  <img v-for="(img, index) in images" :key="index" :src="img" alt="AI Image" class="image" />
                 </figure>
               </template>
             </el-skeleton>
@@ -166,6 +177,7 @@
 
   import { 
     SettingConfig,
+    UploadPicture,
     Help,
   } from '@icon-park/vue-next';
 
@@ -178,10 +190,6 @@
     prompt: '',
     req_key: 'high_aes_general_v21_L',
     model_version: 'general_v2.1_L',
-    // 默认值：general_v20_9B_pe
-    // 标准版：general_v20_9B_rephraser
-    // 美感版：general_v20_9B_pe
-    req_schedule_conf: 'general_v20_9B_pe',
     seed: -1,
     // 影响文本描述的程度
     scale: 5,
@@ -191,6 +199,7 @@
     use_pre_llm: true,
     use_sr: true,
     return_img: true,
+    // return_url: true,
   });
 
   const size = 480;
@@ -199,36 +208,58 @@
   const image_width = ref(size);
   const image_height = ref(size);
   const model_popover = ref(null);
+  const upload_el = ref(null);
+  const upload_image = ref('');
   const active_names = ref(['1', '2']);
   const models = ref([
     { 
+      // https://www.volcengine.com/docs/6791/1366783
       label: '图片2.1', 
       selected: true,
       image: require('@/assets/images/ai.webp'),
       desc: '稳定的结构和更强的影视质感，支持生成中、英文文字', 
-      value: 'high_aes_general_v21_L' 
+      value: 'high_aes_general_v21_L',
+      model_version: 'general_v2.1_L',
+      // 标准版：general_v20_9B_rephraser
+      // 美感版：general_v20_9B_pe
+      req_schedule_conf: 'general_v20_9B_pe',
     },
+
+    // https://www.volcengine.com/docs/6791/1339374
     { 
       label: '图片2.0 Pro', 
       selected: false,
       image: require('@/assets/images/ai.webp'),
       desc: '大幅提升了多样性和真实的照片质感，开启创新与设计的视觉梦境', 
-      value: 'high_aes_general_v21_L' 
+      value: 'high_aes_general_v20_L',
+      model_version: 'general_v2.0_L',
     },
+
+    // https://www.volcengine.com/docs/6791/1333839
     { 
       label: '图片2.0', 
       selected: false,
       image: require('@/assets/images/ai.webp'),
       desc: '更精准的描述词响应和多样的风格组合，模型极具想象力！', 
-      value: 'high_aes_general_v21_L' 
+      value: 'high_aes_general_v20',
+      model_version: 'general_v2.0'
+
+      // https://www.volcengine.com/docs/6791/1424608
+      // image to image
+
     },
+
+    // https://www.volcengine.com/docs/6791/1330195
     { 
       label: '图片 XL Pro', 
       selected: false,
       image: require('@/assets/images/ai.webp'),
       desc: '增强英文生成能力和参考图可控能力，使用引号强化文字效果', 
-      value: 'high_aes_general_v21_L' 
+      value: 't2i_xl_sft',
+      model_version: 't2i_xl_sft'
     },
+
+    // https://www.volcengine.com/docs/6791/1424608
   ]);
 
   const ratios = ref([
@@ -322,6 +353,16 @@
       item.selected = false;
     });
 
+    data.value.req_key = model.value;
+    data.value.model_version = model.model_version;
+
+    if (model.req_schedule_conf) {
+      data.value.req_schedule_conf = model.req_schedule_conf;
+    } else if (data.value.req_schedule_conf) {
+      // remove req_schedule_conf if exist
+      delete data.value.req_schedule_conf;
+    }
+
     model.selected = true;
     model_popover.value.hide();
   };
@@ -329,16 +370,87 @@
   const generateImage = () => {
     is_loading.value = true;
 
-    setTimeout(() => {
+    if (upload_image.value) {
+      // const arr = [];
+      // // arr.push(upload_image.value.split(',')[1]);
+      // arr.push(upload_image.value);
+
+      // data.value.binary_data_base64 = arr;
+      // data.value.image_urls = ['https://prev.imagekorea.co.kr/banner/842.jpg']
+      data.value.req_key = 'high_aes_scheduler_svr_controlnet_v2.0';
+      data.value.model_version = 'general_controlnet_v2.0';
+      data.value.use_rephraser = true;
+      data.value.use_sr = true;
+      data.value.sr_seed = -1;
+      data.value.sr_strength = 0.4;
+      data.value.sr_scale = 3.5;
+      data.value.sr_steps = 10;
+      
+      // "use_sr": true,
+      // "sr_seed": -1,
+      // "sr_strength": 0.4,
+      // "sr_scale": 3.5,
+      // "sr_steps": 10,
+      // 可参考输入图的canny（轮廓边缘）、depth（景深）、pose（人物姿态）进行出图
+      // Ensure binary_data_base64 is an array
+      if (!Array.isArray(data.value.binary_data_base64)) {
+          data.value.binary_data_base64 = [data.value.binary_data_base64];
+      }
+    }
+
+    ajax.post('/ai', data.value).then(res => {
+      // console.log(res.data.data.binary_data_base64);
+
+      res.data.data.binary_data_base64.forEach(item => {
+        images.value.push('data:image/png;base64,' + item);
+      });
       is_loading.value = false;
-      images.value = [
-        'https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png',
-      ];
-    }, 2000);
-    // ajax.post('/ai', data.value).then(res => {
-    //   console.log(res);
-    //   is_loading.value = false;
-    // });
+    });
+  }; 
+
+  const changeImage = async () => {
+    const file = upload_el.value.files[0];
+    try {
+      const base64Data = await getImageBase64(file);
+      upload_image.value = 'data:image/png;base64,' + base64Data;
+      
+      // If you need just the base64 data without the prefix
+      data.value.binary_data_base64 = [base64Data]; // Wrap in array as API expects
+
+      data.value.controlnet_args = {};
+      data.value.controlnet_args.binary_data_index = 0;
+      data.value.controlnet_args.type = 'canny';
+      data.value.controlnet_args.strength = 0.8;
+
+      selectModel(models.value[2]);
+    } catch (error) {
+      console.error('Error converting image to base64:', error);
+    }
+    // const file = upload_el.value.files[0];
+    
+    // // file to bade64
+    // const reader = new FileReader();
+    // reader.readAsDataURL(file);
+    // reader.onload = function(e) {
+    //   upload_image.value = e.target.result;
+
+    //   selectModel(models.value[2]);
+    // };
+  };
+
+  const getImageBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        // Get the base64 string
+        const base64String = reader.result;
+        // Remove data URL prefix (e.g. "data:image/jpeg;base64,")
+        const base64Data = base64String.split(',')[1];
+        resolve(base64Data);
+      };
+      reader.onerror = (error) => reject(error);
+    });
   };
 
 
@@ -391,6 +503,7 @@
 
     .ui-aside {
       padding: 0 24px 24px;
+      overflow: visible;
 
       .col {
         border: 1px solid var(--ui-border-color);
@@ -400,6 +513,9 @@
         display: grid;
         grid-template-rows: 1fr auto;
         overflow: hidden;
+        position: relative;
+        z-index: 3;
+        box-shadow: 0 0 3px 1px rgba(0, 0, 0, .08);
 
         .tools {
           overflow-y: auto;
@@ -421,6 +537,56 @@
           font-weight: 500;
           margin-bottom: 6px;
           color: var(--Text-primary);
+        }
+
+        .input-wrap {
+          position: relative;
+
+          .ui-button {
+            position: absolute;
+            left: 4px;
+            bottom: 4px;
+            overflow: hidden;
+            cursor: pointer;
+
+            svg {
+              margin-right: 4px;
+            }
+
+            input {
+              opacity: 0;
+              position: absolute;
+              cursor: pointer;
+              width: 100%;
+              height: 100%;
+              top: 0;
+              left: 0;
+            }
+          }
+
+          .upload-image {
+            display: flex;
+            align-items: center;
+            margin-top: 8px;
+            position: absolute;
+            left: 4px;
+            bottom: 4px;
+
+            img {
+              width: 24px;
+              height: 24px;
+              border-radius: var(--Radius);
+              margin-right: 8px;
+            }
+
+            span {
+              cursor: pointer;
+              color: var(--Text-brand);
+              font-size: 12px;
+              display: flex;
+              align-items: center;
+            }
+          }
         }
       }
 
@@ -577,6 +743,7 @@
     
     & > .ui-container {
       height: calc(100vh - 64px);
+      
     }
 
 
@@ -686,6 +853,11 @@
             margin-left: 8px;
             color: var(--Text-brand);
           }
+        }
+
+        &.disabled {
+          opacity: 0.5;
+          pointer-events: none;
         }
       }
     }

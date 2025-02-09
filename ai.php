@@ -36,9 +36,9 @@ class ImageGenerator {
             // Merge request data with default body
             $body = array_merge($this->defaultBody, $requestData);
 
-            // print_r($body);
-            // exit;
-            
+            // echo debug data
+            // die(json_encode($body));
+
             // Process image
             $response = $this->client->CVProcess(['json' => $body]);
             $response = str_replace('\u0026', '&', $response);
