@@ -398,7 +398,7 @@
       }
     }
 
-    ajax.post('/ai', data.value).then(res => {
+    ajax.post('/Test.php', data.value).then(res => {
       // console.log(res.data.data.binary_data_base64);
 
       res.data.data.binary_data_base64.forEach(item => {
