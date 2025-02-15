@@ -1,31 +1,27 @@
 <template>
-  <global-wrap>
-    <div class="home-content">
-      <div class="home-page">
-        <h2 @click="openAI">注册</h2>
-      </div>
+  <global-wrap :hide_sidebar="true">
+    <div class="register-page">
+      <Register />
     </div>
   </global-wrap>
 </template>
 
 <script setup>
-import GlobalWrap from '../components/GlobalWrap.vue';
-
+  import GlobalWrap from '../components/GlobalWrap.vue';
+  import Register from '../components/Register.vue';
 </script>
 
 <style lang="scss">
-.home-content {
-  padding: 20px;
+.register-page {
   display: flex;
   justify-content: center;
   align-items: center;
-  text-align: center;
+  min-height: calc(100vh - 60px);
+  background-color: var(--Bg-01);
 
-  .home-page {
-    h2 {
-      margin-bottom: 20px;
-      cursor: pointer;
-    }
+  .register-container {
+    width: 480px;
+    padding: 24px;
   }
 }
 </style>

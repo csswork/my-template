@@ -4,7 +4,7 @@ import Axios from 'axios';
 // For mode development or production
 // https://vite.dev/guide/env-and-mode
 const mode = import.meta.env.MODE;
-const ajax_url = 'http://localhost:3001';
+const ajax_url = 'http://localhost:3001/api/';
 
 const headers = {};
 headers.Accept = 'application/json';
