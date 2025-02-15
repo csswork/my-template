@@ -32,7 +32,7 @@
 </script>
 
 <style lang="scss">
-  .popup-register {
+  body .popup-register {
     .ui-dialog__headerbtn {
       right: 16px;
       top: 32px;
