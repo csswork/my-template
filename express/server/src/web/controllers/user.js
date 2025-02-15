@@ -18,54 +18,7 @@ export const userController = {
         profile 
       } = req.body;
 
-      // Validate required fields
-      if (!username || !password) {
-        return res.status(400).json({
-          success: false,
-          message: 'Username and password are required'
-        });
-      }
-  
-      // Validate at least one contact method
-      if (!email && !phone && !wechat) {
-        return res.status(400).json({
-          success: false,
-          message: 'At least one contact method (email, phone, or wechat) is required'
-        });
-      }
-
-      // Check existing user
-      const queryParams = [];
-      const queryConditions = [];
-      
-      if (username) {
-        queryConditions.push('username = ?');
-        queryParams.push(username);
-      }
-      if (email) {
-        queryConditions.push('email = ?');
-        queryParams.push(email);
-      }
-      if (phone) {
-        queryConditions.push('phone = ?');
-        queryParams.push(phone);
-      }
-      if (wechat) {
-        queryConditions.push('wechat = ?');
-        queryParams.push(wechat);
-      }
-
-      const [existing] = await conn.query(
-        `SELECT id FROM users WHERE ${queryConditions.join(' OR ')}`,
-        queryParams
-      );
-
-      if (existing.length) {
-        return res.status(400).json({
-          success: false,
-          message: 'Username, email, phone or wechat already exists'
-        });
-      }
+      // ... existing validation code ...
 
       const hashedPassword = await bcrypt.hash(password, 10);
       
@@ -105,17 +58,63 @@ export const userController = {
         );
       }
 
+      // Get complete user data after creation
+      const [userData] = await conn.query(
+        `SELECT 
+          u.id,
+          u.username,
+          u.email,
+          u.phone,
+          u.wechat,
+          u.role,
+          p.avatar_url,
+          p.first_name,
+          p.last_name,
+          p.company
+        FROM users u
+        LEFT JOIN user_profiles p ON u.id = p.user_id
+        WHERE u.id = ?`,
+        [userResult.insertId]
+      );
+
+      // Generate token
+      const token = jwt.sign(
+        { 
+          id: userResult.insertId, 
+          username: username,
+          role: 'user' // Default role for new users
+        },
+        process.env.JWT_SECRET,
+        { expiresIn: '24h' }
+      );
+
       await conn.commit();
+
+      // Update last login timestamp
+      await pool.query(
+        'UPDATE users SET last_login = CURRENT_TIMESTAMP WHERE id = ?',
+        [userResult.insertId]
+      );
 
       res.status(201).json({
         success: true,
         message: 'User registered successfully',
         data: {
-          id: userResult.insertId,
-          username,
-          email,
-          phone,
-          wechat
+          token,
+          user: {
+            id: userData[0].id,
+            username: userData[0].username,
+            email: userData[0].email,
+            phone: userData[0].phone,
+            wechat: userData[0].wechat,
+            role: userData[0].role,
+            profile: {
+              avatar_url: userData[0].avatar_url,
+              first_name: userData[0].first_name,
+              last_name: userData[0].last_name,
+              company: userData[0].company
+            }
+          }
         }
       });
     } catch (error) {

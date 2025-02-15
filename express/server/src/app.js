@@ -41,7 +41,7 @@ app.use(express.json());
 
 // Web
 app.use('/api/', aiRouter);
-add.use('/api/', userRouter);
+app.use('/api/', userRouter);
 // app.use('/api/', webRoutes);
 
 // Serve static assets in production
