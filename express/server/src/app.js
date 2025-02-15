@@ -1,26 +1,41 @@
 import path from 'path';
 import express from 'express';
 import cors from 'cors';
-import cmsRoutes from './cms/routes/posts';
+import dotenv from 'dotenv';
+import initDatabase from './utils/initdb.js';
 
+dotenv.config();
+// initDatabase()
+//   .then(() => {
+//     // ...existing code...
+    
+//     const PORT = process.env.PORT || 3000;
+//     app.listen(PORT, () => {
+//       console.log(`Server running on port ${PORT}`);
+//     });
+//   })
+//   .catch(error => {
+//     console.error('Failed to initialize database:', error);
+//     process.exit(1);
+//   });
+// import cmsRoutes from './cms/routes/posts';
 // import path
 
-
 // import authMiddleware from './middleware/auth';
-// import webRoutes from './web/routes/posts';
+import postsRouter from './cms/routes/posts.js';
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-// CMS 接口（需要管理员权限）
+// CMS
 // app.use('/api/cms', authMiddleware.requireAdmin, cmsRoutes);
-app.use('/api/cms', cmsRoutes);
+app.use('/cms/api/', postsRouter);
 
-// Web 公开接口
-// app.use('/api/web', webRoutes);
+// Web
+// app.use('/api/', webRoutes);
 
-// 前端静态文件托管（生产环境）
+// Serve static assets in production
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static('client/dist'));
   app.get('*', (req, res) => {
