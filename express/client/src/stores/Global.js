@@ -18,6 +18,14 @@ export const useGlobalStore = defineStore('global', {
   actions: {
     // Define your actions here
     // https://pinia.vuejs.org/core-concepts/actions.html
+    setToken(token) {
+      this.token = token;
+      window.localStorage.setItem('token', token);
+    },
+
+    setUser(user) {
+      this.user = user;
+    },
 
     
   }

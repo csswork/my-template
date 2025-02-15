@@ -436,6 +436,15 @@ export const userController = {
         message: error.message
       });
     }
+  },
+
+  // Logout
+  async logout(req, res) {
+    // Remove token from client side
+    res.json({
+      success: true,
+      message: 'Logout successful'
+    });
   }
 
 };

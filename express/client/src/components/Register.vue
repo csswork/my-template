@@ -120,12 +120,16 @@
   import { ref, reactive } from 'vue';
   import { ElMessage } from 'element-plus';
   import { useRouter } from 'vue-router';
-import ajax from '../utils/Ajax';
+  import ajax from '../utils/Ajax';
+  import { useGlobalStore } from '../stores/Global';
 
   const router = useRouter();
   const loading = ref(false);
   const activeTab = ref('account');
   const countdown = ref(0);
+
+  const emit = defineEmits(['success']);
+  const store = useGlobalStore();
 
   // Password visibility
   const showPassword = ref(false);
@@ -196,7 +200,17 @@ import ajax from '../utils/Ajax';
         loading.value = true;
 
         ajax.post('/register', accountForm).then(res => {
-          console.log(res);
+          if (res.data.success && res.data.data.token) {
+            store.setToken(res.data.data.token);
+            store.setUser(res.data.data.user);
+            
+            if (router.name === 'RegisterPage') {
+              router.replace('/');
+            } else {
+              emit('success');
+            }
+            
+          }
 
           ElMessage.success('注册成功');
           // router.push('/login');
