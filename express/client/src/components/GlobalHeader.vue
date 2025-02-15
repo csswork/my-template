@@ -31,7 +31,7 @@
             </li>
             <li class="divider"></li>
             <li>
-              <router-link to="/login">退出</router-link>
+              <router-link @click="logout">退出</router-link>
             </li>
           </ul>
           <template #reference>
@@ -41,7 +41,7 @@
               />
           </template>
         </el-popover>
-        <el-button-group>
+        <el-button-group v-else>
           <el-button type="primary" size="small" round @click="router.push('/login')">
             <login theme="outline" :strokeWidth="2.8"/>
             登录
@@ -60,6 +60,7 @@ import { ref, onMounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { useGlobalStore } from '@/stores/Global';
 import { Diamond, Login, User } from '@icon-park/vue-next';
+import ajax from '@/utils/Ajax';
 
 const store = useGlobalStore();
 const route = useRoute();
@@ -99,6 +100,14 @@ const goBack = () => {
   router.go(-1);
 };
 
+const logout = () => {
+  ajax.post('/logout').then(() => {
+    store.setUser(null);
+    store.setToken(null);
+    router.push('/login');
+  });
+};
+
 onMounted(() => {
   if (props.heading) {
     title.value = props.heading;
@@ -113,27 +122,26 @@ onMounted(() => {
 
 <style lang="scss">
 .global-header {
-    padding: 16px 24px;
+  padding: 16px 24px;
 
-    .page-title {
-        font-size: 14px;
-        font-weight: 400;
+  .page-title {
+    font-size: 14px;
+    font-weight: 400;
+  }
+
+  .flex {
+    display: flex;
+    align-items: center;
+
+    .ui-avatar {
+      margin-left: 12px;
     }
 
-    .flex {
-        display: flex;
-        align-items: center;
+    .ui-button {
+      margin-left: 8px;
 
-        .ui-button {
-            margin-left: 8px;
-            // background: linear-gradient(45deg, var(--Neu-70) 0%, var(--Neu-90) 20%, var(--Violet-20) 80%, var(--Violet-30) 100%);
-            // border: none;
-
-            // &:hover {
-            //   background: linear-gradient(25deg, var(--Neu-70) 0%, var(--Neu-90) 20%, var(--Violet-20) 80%, var(--Violet-30) 100%);
-            // }
-        }
     }
+  }
 
 }
 .menu-popover {

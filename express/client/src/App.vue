@@ -19,6 +19,10 @@ const store = useGlobalStore();
 
 if (window.localStorage.getItem('token')) {
   ajax.get('/me').then((res) => {
+    if (route.name === 'login' || route.name === 'register') {
+      router.replace('/');
+    }
+
     store.setUser(res.data.data);
   });
 }

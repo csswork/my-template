@@ -17,7 +17,7 @@
         >
           <ul class="list-unstyled">
             <li>
-              <router-link to="/me">个人中心</router-link>
+              <router-link to="/personal">个人主页</router-link>
             </li>
             <li>
               <router-link to="/setting">设置</router-link>
