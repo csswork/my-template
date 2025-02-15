@@ -2,7 +2,7 @@ import path from 'path';
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import initDatabase from './utils/initdb.js';
+// import initDatabase from './utils/initdb.js';
 
 dotenv.config();
 // initDatabase()
@@ -23,9 +23,15 @@ dotenv.config();
 
 // import authMiddleware from './middleware/auth';
 import postsRouter from './cms/routes/posts.js';
+import aiRouter from './web/routes/ai.js';
 
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin: process.env.FRONTEND_URL || 'http://localhost:5174',
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
+}));
 app.use(express.json());
 
 // CMS
@@ -33,6 +39,7 @@ app.use(express.json());
 app.use('/cms/api/', postsRouter);
 
 // Web
+app.use('/api/', aiRouter);
 // app.use('/api/', webRoutes);
 
 // Serve static assets in production

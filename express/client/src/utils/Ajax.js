@@ -4,7 +4,7 @@ import Axios from 'axios';
 // For mode development or production
 // https://vite.dev/guide/env-and-mode
 const mode = import.meta.env.MODE;
-const ajax_url = mode === 'development' ? 'http://haibo.me' : 'http://doubao.1tu.com';
+const ajax_url = 'http://localhost:3001';
 
 const headers = {};
 headers.Accept = 'application/json';
