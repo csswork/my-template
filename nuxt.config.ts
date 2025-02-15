@@ -5,7 +5,10 @@ export default defineNuxtConfig({
   nitro: {
     timing: true,
     storage: {
-      data: { driver: 'fs', base: './' }
+      data: { 
+        driver: 'fs', 
+        base: './' 
+      }
     }
   },
   modules: ['nuxt-swiper', '@pinia/nuxt']
