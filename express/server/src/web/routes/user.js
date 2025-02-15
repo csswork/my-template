@@ -9,11 +9,14 @@ const router = express.Router();
 // Public routes
 router.post('/register', validateRegister, validate, userController.register);
 router.post('/login', validateLogin, validate, userController.login);
+router.post('/forgot-password', userController.forgotPassword);
 
 // Protected routes for all authenticated users
 router.get('/me', auth, userController.getUserByToken);
 router.get('/profile', auth, userController.getProfile);
-router.put('/profile', auth, userController.updateProfile);
+router.post('/profile', auth, userController.updateProfile);
+router.post('/logout', auth, userController.logout);
+
 
 // Admin only routes
 // router.get('/users', auth, authorize('admin'), userController.getAllUsers);

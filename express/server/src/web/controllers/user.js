@@ -1,6 +1,8 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import pool from '../../utils/db.js';
+import nodemailer from 'nodemailer';
+import crypto from 'crypto';
 
 export const userController = {
   // Register with profile
@@ -444,7 +446,7 @@ export const userController = {
           company: userData.company
         }
       };
-      
+
       res.json({
         success: true,
         data: response
@@ -457,6 +459,90 @@ export const userController = {
     }
   },
 
+  // Forgot password
+  async forgotPassword(req, res) {
+    const { email } = req.body;
+    const conn = await pool.getConnection();
+
+    try {
+      // Validate email
+      if (!email) {
+        return res.status(400).json({
+          success: false,
+          message: 'Email is required'
+        });
+      }
+
+      // Check if user exists
+      const [users] = await conn.query(
+        'SELECT id, username FROM users WHERE email = ?',
+        [email]
+      );
+
+      if (!users.length) {
+        return res.status(404).json({
+          success: false,
+          message: 'No user found with this email'
+        });
+      }
+
+      // Generate reset token
+      const resetToken = crypto.randomBytes(32).toString('hex');
+      const resetTokenExpiry = new Date(Date.now() + 3600000); // 1 hour
+
+      // Save reset token in database
+      await conn.query(
+        `UPDATE users SET 
+          reset_token = ?,
+          reset_token_expires = ?,
+          updated_at = CURRENT_TIMESTAMP
+        WHERE email = ?`,
+        [resetToken, resetTokenExpiry, email]
+      );
+
+      // Create email transporter
+      const transporter = nodemailer.createTransport({
+        host: process.env.SMTP_HOST,
+        port: process.env.SMTP_PORT,
+        secure: true,
+        auth: {
+          user: process.env.SMTP_USER,
+          pass: process.env.SMTP_PASS
+        }
+      });
+
+      // Reset link
+      const resetLink = `${process.env.FRONTEND_URL}/reset-password/${resetToken}`;
+
+      // Send email
+      await transporter.sendMail({
+        from: process.env.SMTP_FROM,
+        to: email,
+        subject: '密码重置请求',
+        html: `
+          <h1>密码重置</h1>
+          <p>您好，</p>
+          <p>我们收到了您的密码重置请求。请点击下面的链接重置密码：</p>
+          <a href="${resetLink}">${resetLink}</a>
+          <p>此链接将在1小时后失效。</p>
+          <p>如果您没有请求重置密码，请忽略此邮件。</p>
+        `
+      });
+
+      res.json({
+        success: true,
+        message: '重置密码邮件已发送，请检查您的邮箱'
+      });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        message: error.message
+      });
+    } finally {
+      conn.release();
+    }
+  },
+  
   // Logout
   async logout(req, res) {
     // Remove token from client side

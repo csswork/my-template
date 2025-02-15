@@ -21,7 +21,7 @@
         >
           <ul class="list-unstyled">
             <li>
-              <router-link to="/me">个人中心</router-link>
+              <router-link to="/personal">个人中心</router-link>
             </li>
             <li>
               <router-link to="/setting">设置</router-link>
@@ -30,8 +30,8 @@
               <router-link to="/password">通知</router-link>
             </li>
             <li class="divider"></li>
-            <li>
-              <router-link @click="logout">退出</router-link>
+            <li v-loading.fullscreen.lock="fullscreenLoading">
+              <a @click="logout()">退出</a>
             </li>
           </ul>
           <template #reference>
@@ -58,7 +58,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
-import { useGlobalStore } from '@/stores/Global';
+import { useGlobalStore } from '../stores/Global';
 import { Diamond, Login, User } from '@icon-park/vue-next';
 import ajax from '@/utils/Ajax';
 
@@ -66,6 +66,7 @@ const store = useGlobalStore();
 const route = useRoute();
 const router = useRouter();
 const title = ref('');
+const fullscreenLoading = ref(false);
 
 const props = defineProps({
   heading: {
@@ -101,10 +102,12 @@ const goBack = () => {
 };
 
 const logout = () => {
+  fullscreenLoading.value = true;
   ajax.post('/logout').then(() => {
-    store.setUser(null);
-    store.setToken(null);
-    router.push('/login');
+    // store.setUser(null);
+    // store.setToken(null);
+    // router.push('/login');
+    fullscreenLoading.value = false;
   });
 };
 
