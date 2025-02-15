@@ -208,7 +208,7 @@
   import ajax from '@/utils/Ajax';
   import event from '@/utils/EventBus';
 
-  const is_show_ai = ref(true);
+  const is_show_ai = ref(false);
 
   const data = ref({
     prompt: '',

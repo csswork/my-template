@@ -22,12 +22,13 @@ dotenv.config();
 // import path
 
 // import authMiddleware from './middleware/auth';
-import postsRouter from './cms/routes/posts.js';
+// import postsRouter from './cms/routes/posts.js';
+import userRouter from './web/routes/user.js';
 import aiRouter from './web/routes/ai.js';
 
 const app = express();
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:5174',
+  origin: process.env.FRONTEND_URL || 'http://localhost:5175',
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
@@ -36,10 +37,11 @@ app.use(express.json());
 
 // CMS
 // app.use('/api/cms', authMiddleware.requireAdmin, cmsRoutes);
-app.use('/cms/api/', postsRouter);
+// app.use('/cms/api/', postsRouter);
 
 // Web
 app.use('/api/', aiRouter);
+add.use('/api/', userRouter);
 // app.use('/api/', webRoutes);
 
 // Serve static assets in production
