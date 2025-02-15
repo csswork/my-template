@@ -7,7 +7,7 @@ const routes = [
     component: () => import(/* webpackChunkName: "home" */ '../views/HomePage.vue'),
     meta: {
       heading: '首页',
-      requiresAuth: true
+      requiresAuth: false
     }
   },
   {
@@ -16,7 +16,7 @@ const routes = [
     component: () => import(/* webpackChunkName: "explore" */ '../views/ExplorePage.vue'),
     meta: {
       heading: '探索',
-      requiresAuth: true
+      requiresAuth: false
     }
   },
   {
@@ -37,8 +37,24 @@ const routes = [
       requiresAuth: true
     }
   },
-  
-
+  {
+    path: '/register',
+    name: 'register',
+    component: () => import(/* webpackChunkName: "register" */ '../views/RegisterPage.vue'),
+    meta: {
+      heading: '注册',
+      requiresAuth: false
+    },
+  },
+  {
+    path: '/login',
+    name: 'login',
+    component: () => import(/* webpackChunkName: "login" */ '../views/LoginPage.vue'),
+    meta: {
+      heading: '登录',
+      requiresAuth: false
+    }
+  },
 ];
 
 let base_url = '/';

@@ -51,20 +51,44 @@
     --ui-button-active-border-color: var(--PB-100);
   }
 
-  .svg-icon {
-    width: 12px;
-    height: 12px;
+  &--primary.is-plain, 
+  &--primary.is-text, 
+  &--primary.is-link {
+    --ui-button-text-color: var(--ui-color-primary);
+    --ui-button-bg-color: var(--Neu-10);
+    --ui-button-border-color: var(--ui-color-primary-light-5);
+    --ui-button-hover-text-color: var(--ui-color-white);
+    --ui-button-hover-bg-color: var(--ui-color-primary);
+    --ui-button-hover-border-color: var(--ui-color-primary);
+    --ui-button-active-text-color: var(--ui-color-white);
+  }
+
+  .i-icon {
+    margin-right: 4px;
+    height: 14px;
+    width: 14px;
+
+    svg {
+      height: 100%;
+      width: 100%;
+    }
+  }
+
+  & > span > .ui-icon:first-child {
+    margin-right: 4px;
+    height: 14px;
+    width: 14px;
+
+    svg {
+      height: 100%;
+      width: 100%;
+    }
   }
 
   &--large {
     height: 40px;
     padding: 0 20px;
     font-size: 16px;
-
-    .svg-icon {
-      width: 14px;
-      height: 14px;
-    }
   }
 
   &.ui-button--w100 {

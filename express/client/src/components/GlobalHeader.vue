@@ -7,13 +7,17 @@
     </template>
     <template #extra>
       <div class="flex">
-        <el-button type="primary" size="small" round>促销活动 80%off</el-button>
+        <el-button type="primary" size="small" round>
+          <diamond theme="outline" :strokeWidth="2.8"/>
+          促销活动 80% off
+        </el-button>
 
-        <el-popover
-            placement="bottom"
-            :width="180"
-            popper-class="menu-popover"
-            popper-style="box-shadow: rgb(14 18 22 / 35%) 0px 10px 38px -10px, rgb(14 18 22 / 20%) 0px 10px 20px -15px; padding: 20px;"
+        <el-popover 
+          v-if="store.is_login"
+          placement="bottom"
+          :width="180"
+          popper-class="menu-popover"
+          popper-style="box-shadow: rgb(14 18 22 / 35%) 0px 10px 38px -10px, rgb(14 18 22 / 20%) 0px 10px 20px -15px; padding: 20px;"
         >
           <ul class="list-unstyled">
             <li>
@@ -32,11 +36,20 @@
           </ul>
           <template #reference>
             <el-avatar
-                :size="32"
-                :src="user_avatar"
-                />
+              :size="32"
+              :src="user_avatar"
+              />
           </template>
         </el-popover>
+        <el-button-group>
+          <el-button type="primary" size="small" round @click="router.push('/login')">
+            <login theme="outline" :strokeWidth="2.8"/>
+            登录
+          </el-button>
+          <el-button type="primary" size="small" round @click="router.push('/register')">
+            <user theme="outline" :strokeWidth="2.8"/>
+            注册</el-button>
+        </el-button-group>
       </div>
     </template>
   </el-page-header>
@@ -45,7 +58,10 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
+import { useGlobalStore } from '@/stores/Global';
+import { Diamond, Login, User } from '@icon-park/vue-next';
 
+const store = useGlobalStore();
 const route = useRoute();
 const router = useRouter();
 const title = ref('');
@@ -90,7 +106,7 @@ onMounted(() => {
     title.value = route.meta.heading;
   }
 
-  console.log('title', title.value);
+  // console.log('title', title.value);
 });
 
 </script>
@@ -109,7 +125,7 @@ onMounted(() => {
         align-items: center;
 
         .ui-button {
-            margin-right: 12px;
+            margin-left: 8px;
             // background: linear-gradient(45deg, var(--Neu-70) 0%, var(--Neu-90) 20%, var(--Violet-20) 80%, var(--Violet-30) 100%);
             // border: none;
 
