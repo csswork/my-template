@@ -41,5 +41,10 @@ export const useGlobalStore = defineStore('global', {
       this.is_login = true;
 
     },
+
+    logout() {
+      this.setToken(null);
+      this.setUser(null);
+    },
   }
 });

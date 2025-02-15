@@ -107,6 +107,7 @@ const logout = () => {
     // store.setUser(null);
     // store.setToken(null);
     // router.push('/login');
+    store.logout();
     fullscreenLoading.value = false;
   });
 };
