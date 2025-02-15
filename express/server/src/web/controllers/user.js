@@ -542,14 +542,102 @@ export const userController = {
       conn.release();
     }
   },
-  
+
+  // Add to userController
+  async resetPassword(req, res) {
+    const { token, password } = req.body;
+    const conn = await pool.getConnection();
+
+    try {
+      // Validate input
+      if (!token || !password) {
+        return res.status(400).json({
+          success: false,
+          message: 'Token and new password are required'
+        });
+      }
+
+      // Find user with valid reset token
+      const [users] = await conn.query(
+        `SELECT id FROM users 
+        WHERE reset_token = ? 
+        AND reset_token_expires > CURRENT_TIMESTAMP`,
+        [token]
+      );
+
+      if (!users.length) {
+        return res.status(400).json({
+          success: false,
+          message: 'Invalid or expired reset token'
+        });
+      }
+
+      // Hash new password
+      const hashedPassword = await bcrypt.hash(password, 10);
+
+      // Update password and clear reset token
+      await conn.query(
+        `UPDATE users SET 
+          password = ?,
+          reset_token = NULL,
+          reset_token_expires = NULL,
+          updated_at = CURRENT_TIMESTAMP
+        WHERE id = ?`,
+        [hashedPassword, users[0].id]
+      );
+
+      res.json({
+        success: true,
+        message: '密码重置成功'
+      });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        message: error.message
+      });
+    } finally {
+      conn.release();
+    }
+  },
+
   // Logout
   async logout(req, res) {
-    // Remove token from client side
-    res.json({
-      success: true,
-      message: 'Logout successful'
-    });
+    try {
+      const token = req.headers.authorization?.split(' ')[1];
+      
+      if (!token) {
+        return res.status(400).json({
+          success: false,
+          message: 'No token provided'
+        });
+      }
+
+      // Decode token to get expiration
+      const decoded = jwt.decode(token);
+      const expiresAt = new Date(decoded.exp * 1000);
+
+      // Add token to blacklist
+      await pool.query(
+        'INSERT INTO token_blacklist (token, expires_at) VALUES (?, ?)',
+        [token, expiresAt]
+      );
+
+      // Update last logout timestamp
+      await pool.query(
+        'UPDATE users SET last_logout = CURRENT_TIMESTAMP WHERE id = ?',
+        [req.user.id]
+      );
+
+      res.json({
+        success: true,
+        message: 'Logout successful'
+      });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        message: error.message
+      });
+    }
   }
 
 };

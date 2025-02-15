@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken';
+import pool from '../utils/db.js';
 
 // Basic authentication middleware
 export const auth = async (req, res, next) => {
@@ -12,6 +13,19 @@ export const auth = async (req, res, next) => {
       });
     }
 
+    // Check if token is blacklisted
+    const [blacklisted] = await pool.query(
+      'SELECT id FROM token_blacklist WHERE token = ? AND expires_at > CURRENT_TIMESTAMP',
+      [token]
+    );
+
+    if (blacklisted.length) {
+      return res.status(401).json({
+        success: false,
+        message: 'Token has been invalidated'
+      });
+    }
+
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     req.user = decoded;
     next();
@@ -22,14 +36,12 @@ export const auth = async (req, res, next) => {
         message: 'Invalid token'
       });
     }
-    
     if (error.name === 'TokenExpiredError') {
       return res.status(401).json({
         success: false,
         message: 'Token expired'
       });
     }
-
     return res.status(500).json({
       success: false,
       message: error.message

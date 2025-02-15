@@ -10,6 +10,7 @@ const router = express.Router();
 router.post('/register', validateRegister, validate, userController.register);
 router.post('/login', validateLogin, validate, userController.login);
 router.post('/forgot-password', userController.forgotPassword);
+router.post('/reset-password', userController.resetPassword);
 
 // Protected routes for all authenticated users
 router.get('/me', auth, userController.getUserByToken);
