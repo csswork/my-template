@@ -1,117 +1,17 @@
 <template>
-  <global-wrap>
+  <global-wrap :hide_sidebar="true">
     <div class="login-page">
-      <div class="login-container">
-        <h2>登录</h2>
-        <el-tabs v-model="activeTab" class="login-tabs">
-          <!-- 账号密码登录 -->
-          <el-tab-pane label="账号密码登录" name="account">
-            <el-form
-              ref="accountFormRef"
-              :model="accountForm"
-              :rules="accountRules"
-              label-width="0"
-            >
-              <el-form-item prop="username">
-                <el-input 
-                  size="large"
-                  v-model="accountForm.username"
-                  placeholder="用户名/邮箱/手机号"
-                  prefix-icon="User"
-                />
-              </el-form-item>
-              <el-form-item prop="password">
-                <el-input 
-                  size="large"
-                  v-model="accountForm.password"
-                  :type="showPassword ? 'text' : 'password'"
-                  placeholder="请输入密码"
-                  prefix-icon="Lock"
-                >
-                  <template #suffix>
-                    <el-icon 
-                      class="password-eye" 
-                      @click="showPassword = !showPassword"
-                    >
-                      <View v-if="showPassword" />
-                      <Hide v-else />
-                    </el-icon>
-                  </template>
-                </el-input>
-              </el-form-item>
-              <el-button type="primary" size="large" @click="handleAccountLogin" :loading="loading">
-                登录
-              </el-button>
-            </el-form>
-          </el-tab-pane>
 
-          <!-- 手机验证码登录 -->
-          <el-tab-pane label="手机验证码登录" name="phone">
-            <el-form
-              ref="phoneFormRef"
-              :model="phoneForm"
-              :rules="phoneRules"
-              label-width="0"
-            >
-              <el-form-item prop="phone">
-                <el-input 
-                  size="large"
-                  v-model="phoneForm.phone"
-                  placeholder="请输入手机号"
-                  prefix-icon="Iphone"
-                >
-                  <template #append>
-                    <el-button 
-                      :disabled="!!countdown || loading"
-                      @click="handleSendCode"
-                    >
-                      {{ countdown ? `${countdown}s` : '获取验证码' }}
-                    </el-button>
-                  </template>
-                </el-input>
-              </el-form-item>
-              <el-form-item prop="code">
-                <el-input 
-                  size="large"
-                  v-model="phoneForm.code"
-                  placeholder="请输入验证码"
-                  prefix-icon="Lock"
-                />
-              </el-form-item>
-              <el-button type="primary" size="large" @click="handlePhoneLogin" :loading="loading">
-                登录
-              </el-button>
-            </el-form>
-          </el-tab-pane>
-
-          <!-- 扫码登录 -->
-          <el-tab-pane label="扫码登录" name="qrcode">
-            <div class="qrcode-container">
-              <div class="qrcode-box" ref="qrcodeRef">TODO</div>
-              <p>请使用APP扫码登录</p>
-            </div>
-          </el-tab-pane>
-        </el-tabs>
-
-        <div class="login-footer">
-          <el-checkbox v-model="rememberMe">记住我</el-checkbox>
-          <router-link to="/forgot-password">忘记密码？</router-link>
-        </div>
-        <div class="register-link">
-          还没有账号？<router-link to="/register">立即注册</router-link>
-        </div>
-      </div>
     </div>
   </global-wrap>
 </template>
 
 <script setup>
-import { ref, reactive, onMounted, onUnmounted } from 'vue';
+import { ref, reactive } from 'vue';
 import { ElMessage } from 'element-plus';
 import { View, Hide } from '@element-plus/icons-vue';
 import GlobalWrap from '../components/GlobalWrap.vue';
 import ajax from '../utils/Ajax';
-import QRCode from 'qrcode';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
@@ -229,94 +129,99 @@ const handleSendCode = async () => {
 
 </script>
 
-<style lang="scss" scoped>
-.login-page {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: calc(100vh - 60px);
-  background-color: var(--el-bg-color);
+<style lang="scss">
+  .login-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 60px);
+    background-color: var(--el-bg-color);
 
-  .login-container {
-    width: 400px;
-    padding: 30px;
-    background: var(--el-bg-color-overlay);
-    border-radius: 8px;
-    box-shadow: var(--el-box-shadow-light);
+    .login-container {
+      width: 400px;
+      padding: 30px;
+      background: var(--el-bg-color-overlay);
+      border-radius: 8px;
+      box-shadow: var(--el-box-shadow-light);
 
-    h2 {
-      text-align: center;
-      margin-bottom: 30px;
-      color: var(--el-text-color-primary);
-    }
+      h2 {
+        margin-bottom: 24px;
+        font-size: 20px;
+        color: var(--Text-primary);
+      }
 
-    .login-tabs {
-      :deep(.el-tabs__nav) {
-        width: 100%;
+      .login-tabs {
+        :deep(.el-tabs__nav) {
+          width: 100%;
+          
+          .el-tabs__item {
+            flex: 1;
+            text-align: center;
+          }
+        }
+      }
+
+      .ui-form {
+        margin-top: 8px;
+
+        // .ui-form-item {
+        //   margin-bottom: 16px;
+        // }
+
+        .submit-btn {
+          width: 100%;
+          margin-top: 16px;
+        }
+      }
+
+      .password-eye {
+        cursor: pointer;
+        color: var(--Text-secondary);
         
-        .el-tabs__item {
-          flex: 1;
+        &:hover {
+          color: var(--el-text-color-primary);
+        }
+      }
+
+      .qrcode-container {
+        display: block;
+        padding: 16px 0;
+
+        .qrcode-box {
+          width: 200px;
+          height: 200px;
+          margin: 0 auto 16px;
+          position: relative;
+        }
+
+        p {
+          color: var(--Text-secondary);
+          font-size: 12px;
           text-align: center;
         }
       }
-    }
 
-    .el-form {
-      margin-top: 20px;
-
-      .el-button {
-        width: 100%;
+      .login-footer {
         margin-top: 20px;
-      }
-    }
-
-    .password-eye {
-      cursor: pointer;
-      color: var(--el-text-color-secondary);
-      
-      &:hover {
-        color: var(--el-text-color-primary);
-      }
-    }
-
-    .qrcode-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 20px 0;
-
-      .qrcode-box {
-        width: 200px;
-        height: 200px;
-        margin-bottom: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
       }
 
-      p {
-        color: var(--el-text-color-secondary);
-      }
-    }
+      .register-link {
+        margin-top: 15px;
+        text-align: center;
+        color: var(--Text-secondary);
 
-    .login-footer {
-      margin-top: 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
+        a {
+          color: var(--el-color-primary);
+          text-decoration: none;
 
-    .register-link {
-      margin-top: 15px;
-      text-align: center;
-      color: var(--el-text-color-secondary);
-
-      a {
-        color: var(--el-color-primary);
-        text-decoration: none;
-
-        &:hover {
-          text-decoration: underline;
+          &:hover {
+            text-decoration: underline;
+          }
         }
       }
     }
   }
-}
 </style>

@@ -276,10 +276,10 @@
       margin-bottom: 36px;
 
       .ui-form-item__error {
-        margin-top: 8px;
+        margin-top: 6px;
         text-align: right;
         width: 100%;
-        font-size: 14px;
+        font-size: 12px;
       }
     }
 
@@ -324,3 +324,40 @@
   --ui-select-input-focus-border-color: var(--PB-80);
 }
 
+
+.image-placeholder {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  background-color: var(--Black-10);
+  z-index: 1;
+  overflow: hidden;
+  left: 0;
+  top: 0;
+
+  &::before {
+    position: absolute;
+    left: -45%;
+    height: 100%;
+    width: 45%;
+    content: "";
+    z-index: -1;
+    pointer-events: none;
+    background-image: linear-gradient(to left, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.05));
+    animation: loading 1s infinite
+  }
+
+  img {
+      background-color: transparent !important;
+  }
+}
+
+@keyframes loading {
+  0% {
+    left: -45%
+  }
+
+  100% {
+    left: 100%
+  }
+}
