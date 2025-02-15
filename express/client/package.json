@@ -1,5 +1,9 @@
 {
-  "name": "client",
+  "name": "motom-creator",
+  "author": {
+    "name": "motom.me"
+  },
+  "private": true,
   "version": "1.0.0",
   "type": "module",
   "scripts": {
@@ -8,24 +12,25 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@vue/server-renderer": "^3.5.13",
-    "pinia": "^3.0.1",
-    "vue": "^3.5.13",
-    "vue-router": "^4.5.0",
-    "axios": "^1.7.9",
-    "element-plus": "^2.9.4",
     "@element-plus/icons-vue": "^2.3.1",
     "@icon-park/vue-next": "^1.4.2",
+    "axios": "^1.7.9",
+    "element-plus": "^2.9.3",
     "mitt": "^3.0.1",
     "moment": "^2.30.1",
-    "swiper": "^11.2.2"
+    "pinia": "^2.3.1",
+    "swiper": "^11.2.2",
+    "vue": "^3.5.13",
+    "vue-router": "^4.5.0"
   },
   "devDependencies": {
-    "@types/node": "^22.13.4",
+    "@vue/server-renderer": "^3.5.13",
     "@vitejs/plugin-vue": "^5.2.1",
-    "sass": "^1.85.0",
-    "typescript": "^5.7.3",
-    "vite": "^6.1.0",
+    "esbuild": "^0.24.2",
+    "fast-glob": "^3.3.3",
+    "globals": "^15.14.0",
+    "sass": "^1.83.4",
+    "vite": "^6.0.11",
     "vite-plugin-svg-icons": "^2.0.1",
     "vite-plugin-webpackchunkname": "^1.0.3",
     "vite-require": "^0.2.3"

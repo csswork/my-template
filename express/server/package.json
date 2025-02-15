@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "nodemon --watch src --exec node --loader ts-node/esm src/app.ts",
+    "dev": "nodemon --watch src src/app.js",
     "build": "tsc",
     "start": "node dist/app.js"
   },
@@ -15,11 +15,6 @@
     "@vue/server-renderer": "^3.5.13"
   },
   "devDependencies": {
-    "@types/express": "^5.0.0",
-    "@types/cors": "^2.8.17",
-    "@types/node": "^22.13.4",
-    "typescript": "^5.7.3",
-    "ts-node": "^10.9.2",
     "nodemon": "^3.1.9"
   }
 }
