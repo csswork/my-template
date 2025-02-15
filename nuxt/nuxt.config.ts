@@ -11,5 +11,15 @@ export default defineNuxtConfig({
       }
     }
   },
+  vite: {
+    css: {
+      preprocessorOptions: {
+        // scss: {
+        //   api: 'modern-compiler',
+        //   additionalData: `@use "/src/assets/scss/vars.scss" as *; @use "/src/assets/scss/element.scss" as *;`
+        // }
+      }
+    }
+  },
   modules: ['nuxt-swiper', '@pinia/nuxt']
 })

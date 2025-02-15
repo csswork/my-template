@@ -14,6 +14,7 @@ import GlobalWrap from '../components/GlobalWrap.vue';
 import event from '../utils/EventBus';
 import ajax from '../utils/Ajax';
 
+
 const openAI = () => {
   event.emit('open-ai');
 };
