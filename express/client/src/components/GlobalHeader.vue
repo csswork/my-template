@@ -42,17 +42,20 @@
           </template>
         </el-popover>
         <el-button-group v-else>
-          <el-button type="primary" size="small" round @click="router.push('/login')">
+          <el-button type="primary" size="small" round @click="openLogin">
             <login theme="outline" :strokeWidth="2.8"/>
             登录
           </el-button>
-          <el-button type="primary" size="small" round @click="router.push('/register')">
+          <el-button type="primary" size="small" round @click="openRegister">
             <user theme="outline" :strokeWidth="2.8"/>
             注册</el-button>
         </el-button-group>
       </div>
     </template>
   </el-page-header>
+
+  <popup-login v-if="!store.is_login" ref="popup_login" />
+  <popup-register v-if="!store.is_login" ref="popup_register" />
 </template>
 
 <script setup>
@@ -61,12 +64,16 @@ import { useRouter, useRoute } from 'vue-router';
 import { useGlobalStore } from '../stores/Global';
 import { Diamond, Login, User } from '@icon-park/vue-next';
 import ajax from '@/utils/Ajax';
+import PopupLogin from './ui/PopupLogin.vue';
+import PopupRegister from './ui/PopupRegister.vue';
 
 const store = useGlobalStore();
 const route = useRoute();
 const router = useRouter();
 const title = ref('');
 const fullscreenLoading = ref(false);
+const popup_login = ref(null);
+const popup_register = ref(null);
 
 const props = defineProps({
   heading: {
@@ -91,6 +98,23 @@ const props = defineProps({
 });
 
 const user_avatar = require('@/assets/images/user.png');
+
+const openLogin = () => {
+  if (route.name === 'login' || route.name === 'register') {
+    router.push('/login')
+  } else {
+    popup_login.value.open();
+  }  
+};
+
+const openRegister = () => {
+  if (route.name === 'login' || route.name === 'register') {
+    router.push('/register')
+  } else {
+    popup_register.value.open();
+  }
+  
+};
 
 const goBack = () => {
   if (props.back_func) {

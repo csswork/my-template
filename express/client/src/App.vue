@@ -2,7 +2,6 @@
   <el-config-provider namespace="ui">
     <router-view />
     <ai-image />
-
   </el-config-provider>
 </template>
 

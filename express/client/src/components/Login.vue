@@ -107,22 +107,24 @@
   import { ref, reactive } from 'vue';
   import { ElMessage } from 'element-plus';
   import ajax from '../utils/Ajax';
-  import { useRouter } from 'vue-router';
+  import { useRouter, useRoute } from 'vue-router';
   import { useGlobalStore } from '../stores/Global';
 
   const router = useRouter();
+  const route = useRoute();
   const loading = ref(false);
   const activeTab = ref('account');
   const showPassword = ref(false);
   const rememberMe = ref(false);
   const countdown = ref(0);
   const store = useGlobalStore();
+  const emit = defineEmits(['success']);
 
   // Account form
   const accountFormRef = ref(null);
   const accountForm = reactive({
     username: '',
-    password: ''
+    password: '',
   });
 
   // Phone form
@@ -161,14 +163,19 @@
       if (valid) {
         loading.value = true;
         try {
+          if (rememberMe.value) accountForm.rememberMe = true;
+
           const res = await ajax.post('/login', accountForm);
           if (res.data.success) {
             ElMessage.success('登录成功');
             store.setToken(res.data.data.token);
             store.setUser(res.data.data.user);
-            // Store token and redirect
-            // localStorage.setItem('token', res.data.data.token);
-            router.push('/');
+
+            if (route.name === 'register') {
+              router.replace('/');
+            } else {
+              emit('success');
+            }
           }
         } catch (error) {
           ElMessage.error(error.response?.data?.message || '登录失败');
@@ -187,11 +194,18 @@
       if (valid) {
         loading.value = true;
         try {
-          const res = await ajax.post('/api/users/login/phone', phoneForm);
+          if (rememberMe.value) accountForm.rememberMe = true;
+
+          const res = await ajax.post('/login/phone', phoneForm);
           if (res.data.success) {
             ElMessage.success('登录成功');
-            localStorage.setItem('token', res.data.data.token);
-            router.push('/');
+            store.setToken(res.data.data.token);
+            store.setUser(res.data.data.user);
+            if (route.name === 'register') {
+              router.replace('/');
+            } else {
+              emit('success');
+            }
           }
         } catch (error) {
           ElMessage.error(error.response?.data?.message || '登录失败');
@@ -210,7 +224,9 @@
     
     loading.value = true;
     try {
-      await ajax.post('/api/users/send-code', { phone: phoneForm.phone });
+      if (rememberMe.value) accountForm.rememberMe = true;
+
+      await ajax.post('/login/send-code', { phone: phoneForm.phone });
       countdown.value = 60;
       const timer = setInterval(() => {
         countdown.value--;

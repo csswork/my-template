@@ -305,6 +305,8 @@ export const userController = {
   async login(req, res) {
     const { username, password } = req.body;
 
+    
+
     if (!username || !password) {
       return res.status(400).json({
         success: false,
@@ -351,6 +353,9 @@ export const userController = {
       }
 
       // Create token with additional user info
+      // if have rememberMe, set expiresIn to 7 days
+      const expiresIn = req.body.rememberMe ? '7d' : '24h';
+
       const token = jwt.sign(
         { 
           id: user.id, 
@@ -358,7 +363,7 @@ export const userController = {
           role: user.role
         },
         process.env.JWT_SECRET,
-        { expiresIn: '24h' }
+        { expiresIn: expiresIn }
       );
 
       // Remove sensitive data
