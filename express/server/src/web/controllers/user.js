@@ -426,9 +426,28 @@ export const userController = {
         });
       }
 
+      const userData = rows[0];
+    
+      // Restructure the response with nested profile
+      const response = {
+        id: userData.id,
+        username: userData.username,
+        email: userData.email,
+        phone: userData.phone,
+        wechat: userData.wechat,
+        role: userData.role,
+        created_at: userData.created_at,
+        profile: {
+          avatar_url: userData.avatar_url,
+          first_name: userData.first_name,
+          last_name: userData.last_name,
+          company: userData.company
+        }
+      };
+      
       res.json({
         success: true,
-        data: rows[0]
+        data: response
       });
     } catch (error) {
       res.status(500).json({

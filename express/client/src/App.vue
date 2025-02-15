@@ -10,8 +10,18 @@
 import { watch, onMounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import AiImage from './components/AiImage.vue';
+import { useGlobalStore } from './stores/Global';
+import ajax from './utils/Ajax';
 
 const route = useRoute();
+const router = useRouter();
+const store = useGlobalStore();
+
+if (window.localStorage.getItem('token')) {
+  ajax.get('/me').then((res) => {
+    store.setUser(res.data.data);
+  });
+}
 
 watch(() => route.name, () => {
   // update body class

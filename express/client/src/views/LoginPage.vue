@@ -13,5 +13,5 @@ import ajax from '../utils/Ajax';
 </script>
 
 <style lang="scss">
-
+  
 </style>
