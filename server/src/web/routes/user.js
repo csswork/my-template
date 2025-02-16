@@ -1,7 +1,7 @@
 import express from 'express';
 import { userController } from '../controllers/user.js';
 import { auth, authorize } from '../../middleware/auth.js';
-import { validateRegister, validateLogin, validate } from '../controllers/validate.js';
+import { validateRegister, validateLogin, validate } from '../../middleware/validate.js';
 
 
 const router = express.Router();

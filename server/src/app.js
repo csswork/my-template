@@ -20,20 +20,19 @@ import { initJobs } from './jobs/index.js';
 //     console.error('Failed to initialize database:', error);
 //     process.exit(1);
 //   });
-// import cmsRoutes from './cms/routes/posts';
-// import path
 
-// import authMiddleware from './middleware/auth';
-// import postsRouter from './cms/routes/posts.js';
+import cmsRoutes from './cms/routes/admin.js';
+// import postsRouter from './cms/routes/posts';
 
-dotenv.config();
 
 import userRouter from './web/routes/user.js';
 import aiRouter from './web/routes/ai.js';
+
+dotenv.config();
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const PORT = process.env.PORT || 3001;
-
 const app = express();
 
 // Initialize response headers
@@ -51,7 +50,7 @@ app.use(express.json());
 initJobs();
 
 // CMS
-// app.use('/api/cms', authMiddleware.requireAdmin, cmsRoutes);
+app.use('/api/cms', cmsRoutes);
 // app.use('/cms/api/', postsRouter);
 
 // Web
