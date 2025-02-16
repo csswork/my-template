@@ -7,7 +7,7 @@ export const userController = {
     try {
       const [rows] = await pool.query(
         `SELECT u.id, u.username, u.email, u.role, u.status,
-         up.nickname, up.avatar_url, up.gender,
+         up.first_name, up.last_name, up.avatar_url, up.gender,
          u.created_at, u.last_login
          FROM users u
          LEFT JOIN user_profiles up ON u.id = up.user_id
@@ -23,7 +23,8 @@ export const userController = {
           role: row.role,
           status: row.status,
           profile: {
-            nickname: row.nickname,
+            first_name: row.first_name,
+            last_name: row.last_name,
             avatar_url: row.avatar_url,
             gender: row.gender
           },
@@ -82,11 +83,11 @@ export const userController = {
       if (profile) {
         await connection.query(
           `INSERT INTO user_profiles 
-           (user_id, nickname, avatar_url, gender, birth_date, address) 
+           (user_id, first_name, last_name, avatar_url, gender, birth_date, address) 
            VALUES (?, ?, ?, ?, ?, ?)`,
           [
             userResult.insertId,
-            profile.nickname,
+            profile.first_name, profile.last_name,
             profile.avatar_url,
             profile.gender,
             profile.birth_date,
@@ -204,7 +205,7 @@ export const userController = {
                  birth_date = ?, address = ?, updated_at = CURRENT_TIMESTAMP
              WHERE user_id = ?`,
             [
-              profile.nickname,
+              profile.first_name, profile.last_name,
               profile.avatar_url,
               profile.gender,
               profile.birth_date,
@@ -215,11 +216,11 @@ export const userController = {
         } else {
           await connection.query(
             `INSERT INTO user_profiles 
-             (user_id, nickname, avatar_url, gender, birth_date, address)
+             (user_id, first, avatar_url, gender, birth_date, address)
              VALUES (?, ?, ?, ?, ?, ?)`,
             [
               id,
-              profile.nickname,
+              profile.first_name, profile.last_name,
               profile.avatar_url,
               profile.gender,
               profile.birth_date,
