@@ -1,0 +1,363 @@
+@forward 'element-plus/theme-chalk/src/mixins/config.scss' with (
+  $namespace: 'ui'
+);
+
+@use '@/assets/scss/vars';
+@use 'element-plus/theme-chalk/src/index.scss' as *;
+
+:root {
+  --ui-color-primary: var(--PB-80);
+  --ui-color-success: var(--Green-30);
+
+  --ui-color-primary-light-3: var(--PB-80);
+  --ui-color-primary-light-5: var(--PB-60);
+  --ui-color-primary-light-7: var(--PB-40);
+  --ui-color-primary-light-8: var(--PB-20);
+  --ui-color-primary-light-9: var(--Brand-grey);
+  --ui-color-danger: var(--Red-30);
+
+  --ui-text-color-placeholder: var(--Neu-40);
+  --ui-border-radius-base: var(--Radius);
+  --ui-font-weight-primary: 400;
+  --ui-aside-width: 280px;
+}
+
+// button
+.ui-button {
+  --ui-button-disabled-bg-color: var(--Black-05);
+  --ui-button-disabled-border-color: var(--Black-05);
+  --ui-button-disabled-text-color: var(--Black-40);
+
+  height: 32px;
+  padding: 0 16px;
+  box-sizing: border-box;
+  font-family: var(--font-med);
+  font-weight: var(--font-regular);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  &--primary {
+    --ui-button-text-color: var(--Text-light);
+    --ui-button-bg-color: var(--PB-80);
+    --ui-button-border-color: var(--PB-80);
+    --ui-button-outline-color: var(--PB-80);
+    --ui-button-active-color: var(--Text-light);
+    --ui-button-hover-text-color: var(--Text-light);
+    --ui-button-hover-link-text-color: var(--Text-light);
+    --ui-button-hover-bg-color: var(--PB-90);
+    --ui-button-hover-border-color: var(--PB-90);
+    --ui-button-active-bg-color: var(--PB-100);
+    --ui-button-active-border-color: var(--PB-100);
+  }
+
+  &--primary.is-plain, 
+  &--primary.is-text, 
+  &--primary.is-link {
+    --ui-button-text-color: var(--ui-color-primary);
+    --ui-button-bg-color: var(--Neu-10);
+    --ui-button-border-color: var(--ui-color-primary-light-5);
+    --ui-button-hover-text-color: var(--ui-color-white);
+    --ui-button-hover-bg-color: var(--ui-color-primary);
+    --ui-button-hover-border-color: var(--ui-color-primary);
+    --ui-button-active-text-color: var(--ui-color-white);
+  }
+
+  .i-icon {
+    margin-right: 4px;
+    height: 14px;
+    width: 14px;
+
+    svg {
+      height: 100%;
+      width: 100%;
+    }
+  }
+
+  & > span > .ui-icon:first-child {
+    margin-right: 4px;
+    height: 14px;
+    width: 14px;
+
+    svg {
+      height: 100%;
+      width: 100%;
+    }
+  }
+
+  &--large {
+    height: 40px;
+    padding: 0 20px;
+    font-size: 16px;
+  }
+
+  &.ui-button--w100 {
+    width: 100%;
+  }
+
+  &--small {
+    height: 26px;
+    padding: 0 8px;
+    font-size: 12px;
+  }
+
+  &--w100 {
+    display: flex;
+    width: 100%;
+  }
+
+  &--info {
+    --ui-button-text-color: var(--Text-primary);
+    --ui-button-bg-color: var(--Black-05);
+    --ui-button-border-color: var(--Black-05);
+    --ui-button-outline-color: var(--Text-primary);
+    --ui-button-active-color: var(--Text-primary);
+    --ui-button-hover-text-color: var(--Text-primary);
+    --ui-button-hover-link-text-color: var(--Text-primary);
+    --ui-button-hover-bg-color: var(--Black-10);
+    --ui-button-hover-border-color: var(--Black-10);
+    --ui-button-active-bg-color: var(--Black-10);
+    --ui-button-active-border-color: var(--Black-10);
+    --ui-button-disabled-text-color: var(--Black-40);
+    --ui-button-disabled-bg-color: var(--Black-03);
+    --ui-button-disabled-border-color: var(--Black-03);
+  }
+}
+
+.ui-textarea,
+.ui-input {
+  --ui-input-text-color: var(--Text-secondary);
+  --ui-input-border: var(--ui-border);
+  --ui-input-hover-border: var(--Neu-30);
+  --ui-input-focus-border: var(--Neu-60);
+  --ui-input-transparent-border: 0 0 0 1px transparent inset;
+  --ui-input-border-color: var(--ui-border-color);
+  --ui-input-border-radius: var(--Radius);
+  --ui-input-bg-color: var(--ui-fill-color-blank);
+  --ui-input-icon-color: var(--Black-40);
+  --ui-input-placeholder-color: var(--Black-40);
+  --ui-input-hover-border-color: var(--Neu-30);
+  --ui-input-clear-hover-color: var(--Neu-60);
+  --ui-input-focus-border-color: var(--Neu-60);
+  --ui-input-width: 100%;
+}
+
+.ui-radio {
+  --ui-color-primary: var(--PB-80);
+  --ui-radio-font-size: 12px;
+  --ui-radio-text-color: var(--Text-secondary);
+  --ui-radio-font-weight: var(--ui-font-weight-primary);
+  --ui-radio-input-height: 14px;
+  --ui-radio-input-width: 14px;
+  --ui-radio-input-border-radius: var(--ui-border-radius-circle);
+  --ui-radio-input-bg-color: var(--ui-fill-color-blank);
+  --ui-radio-input-border: var(--ui-border);
+  --ui-radio-input-border-color: var(--ui-border-color);
+  --ui-radio-input-border-color-hover: var(--Neu-60);
+
+  background-color: var(--Bg-light);
+  margin: 0;
+}
+
+.ui-header {
+  --ui-header-padding: 0;
+  --ui-header-height: auto;
+}
+
+.ui-link {
+  --ui-link-text-color: var(--Blue-30);
+
+  &:hover {
+    color: var(--ui-link-text-color);
+    text-decoration: underline;
+  }
+}
+
+.ui-page-header__back:hover {
+  color: var(--Text-primary);
+}
+
+.ui-main {
+  --ui-main-padding: 0;
+}
+
+.ui-drawer {
+  --ui-drawer-padding-primary: 0px;
+}
+
+.ui-dialog {
+  padding: 0;
+
+  .ui-dialog__header {
+    padding: 0 16px;
+    font-size: 16px;
+    min-height: 52px;
+    color: var(--Text-primary);
+    border-bottom: 1px solid var(--ui-border-color);
+    display: flex;
+    align-items: center;
+  }
+
+  .ui-dialog__title {
+    flex: 1;
+  }
+
+
+
+  .ui-dialog__headerbtn {
+    cursor: pointer;
+    color: var(--Text-secondary);
+    transition: all 0.2s;
+    height: 32px;
+    width: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    right: -8px;
+    top: auto;
+    border-radius: var(--Radius);
+
+    .ui-icon,
+    svg {
+      width: 18px;
+      height: 18px;
+      display: block;
+    }
+
+    &:hover {
+      color: var(--Text-primary);
+      background-color: var(--Neu-20);
+    }
+  }
+
+  .ui-dialog__body {
+    padding: 16px;
+    color: var(--Text-secondary);
+    background-color: var(--Bg-01);
+  }
+
+  .ui-dialog__footer {
+    padding: 16px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+
+    .ui-button {
+      margin-left: 8px;
+    }
+  }
+}
+
+
+.ui-popover {
+  --ui-popover-bg-color: var(--Bg-light);
+  --ui-popover-border-color: var(--Border-default);
+  --ui-popover-padding: 12px;
+  --ui-popover-padding-large: 16px;
+  --ui-popover-font-size: 14px;
+  --ui-popover-border-radius: var(--Radius-large);
+  --ui-popover-title-text-color: var(--Text-primary);
+  --ui-popover-title-font-size: 16px;
+}
+
+//form
+.ui-form {
+  .ui-form-item {
+    margin-bottom: 10px;
+    display: block;
+    position: relative;
+
+    .ui-form-item__label-wrap {
+      color: var(--Text-primary);
+    }
+
+    &.is-error {
+      margin-bottom: 36px;
+
+      .ui-form-item__error {
+        margin-top: 6px;
+        text-align: right;
+        width: 100%;
+        font-size: 12px;
+      }
+    }
+
+    @media (max-width: vars.$mobile_size) {
+      &.is-error {
+        .ui-form-item__error {
+          text-align: left;
+        }
+      }
+    }
+  }
+}
+
+.ui-slider {
+  --ui-slider-main-bg-color: var(--Neu-60);
+  --ui-slider-runway-bg-color: var(--ui-border-color-light);
+  --ui-slider-stop-bg-color: var(--ui-color-white);
+  --ui-slider-disabled-color: var(--ui-text-color-placeholder);
+  --ui-slider-border-radius: 3px;
+  --ui-slider-height: 4px;
+  --ui-slider-button-size: 12px;
+  --ui-slider-button-wrapper-size: 20px;
+  --ui-slider-button-wrapper-offset: -8px;
+
+  .ui-slider__button {
+    background-color: var(--Neu-60);
+  }
+
+  .ui-slider__bar {
+    background-color: var(--Neu-60);
+  }
+}
+
+.ui-checkbox {
+  white-space: normal;
+  align-items: flex-start;
+}
+
+//select
+.ui-select {
+  width: 100%;
+  --ui-select-input-focus-border-color: var(--PB-80);
+}
+
+
+.image-placeholder {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  background-color: var(--Black-10);
+  z-index: 1;
+  overflow: hidden;
+  left: 0;
+  top: 0;
+
+  &::before {
+    position: absolute;
+    left: -45%;
+    height: 100%;
+    width: 45%;
+    content: "";
+    z-index: -1;
+    pointer-events: none;
+    background-image: linear-gradient(to left, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.05));
+    animation: loading 1s infinite
+  }
+
+  img {
+      background-color: transparent !important;
+  }
+}
+
+@keyframes loading {
+  0% {
+    left: -45%
+  }
+
+  100% {
+    left: 100%
+  }
+}
