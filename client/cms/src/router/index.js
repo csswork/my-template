@@ -105,8 +105,9 @@ const routes = [
 
 let base_url = '/cms/';
 
+
 const router = createRouter({
-  history: createWebHashHistory(base_url),
+  history: import.meta.env.DEV ? createWebHashHistory(base_url) : createWebHistory(base_url),
   // history: createWebHistory(base_url),
   routes,
   scrollBehavior(to, from, savedPosition) {

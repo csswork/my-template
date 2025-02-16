@@ -23,16 +23,17 @@ export default defineConfig({
       output: {
         dir: 'dist',
         format: 'es',
-        chunkFileNames: 'js/[name]-[hash].js',
-        entryFileNames: 'js/[name]-[hash].js',
-        assetFileNames: 'assets/[name]-[hash][ext]',
-        manualChunks: {
-          'element-plus': ['element-plus'],
-          'vendor': [
-            'vue',
-            'vue-router',
-            'pinia'
-          ]
+        chunkFileNames: (chunkInfo) => {
+          const prefix = chunkInfo.facadeModuleId?.includes('/cms/') ? 'cms/' : '';
+          return `${prefix}js/[name]-[hash].js`;
+        },
+        entryFileNames: (chunkInfo) => {
+          const prefix = chunkInfo.name === 'cms' ? 'cms/' : '';
+          return `${prefix}js/[name]-[hash].js`;
+        },
+        assetFileNames: (assetInfo) => {
+          const prefix = assetInfo.name?.includes('/cms/') ? 'cms/' : '';
+          return `${prefix}assets/[name]-[hash][ext]`;
         }
       }
     }

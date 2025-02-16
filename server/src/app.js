@@ -22,6 +22,8 @@ import { initJobs } from './jobs/index.js';
 //   });
 
 import cmsRoutes from './cms/routes/admin.js';
+import typesRouter from './cms/routes/types.js';
+import categoriesRouter from './cms/routes/categories.js';
 // import postsRouter from './cms/routes/posts';
 
 
@@ -51,6 +53,8 @@ initJobs();
 
 // CMS
 app.use('/api/cms', cmsRoutes);
+app.use('/api/cms', typesRouter);
+app.use('/api/cms', categoriesRouter);
 // app.use('/cms/api/', postsRouter);
 
 // Web
@@ -62,20 +66,18 @@ app.use('/api/', userRouter);
 console.log('NODE_ENV:' + process.env.NODE_ENV);
 if (process.env.NODE_ENV === 'production') {
   // Serve static files from the client dist directory
-  const clientDistPath = path.resolve(__dirname, '../../client/dist');
-  app.use(express.static(clientDistPath));
+  // const clientDistPath = path.resolve(__dirname, '../../client/dist');
+  // app.use(express.static(clientDistPath));
   
-  // Serve index.html for all routes (SPA fallback)
-  // app.get('*', (req, res) => {
-  //   res.sendFile(path.join(clientDistPath, 'index.html'));
-  // });
-
-  // Handle SPA routing
+  app.use(express.static('dist'));
+  
+  // Handle CMS routes
   app.get('/cms/*', (req, res) => {
     res.sendFile(path.join(__dirname, '../../client/dist/cms/index.html'));
   });
-  
-  app.get('*', (req, res) => {
+
+  // Handle main app routes
+  app.get('/*', (req, res) => {
     res.sendFile(path.join(__dirname, '../../client/dist/index.html'));
   });
 }
