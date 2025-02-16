@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from 'vue-router';
+import { createRouter, createWebHistory, createWebHashHistory } from 'vue-router';
 
 const routes = [
   {
@@ -92,7 +92,7 @@ const routes = [
     }
   },
   {
-    path: '/settings/type',
+    path: '/settings/:type',
     name: 'sub-settings',
     component: () => import(/* webpackChunkName: "settings" */ '../views/Settings.vue'),
     meta: {
@@ -106,8 +106,8 @@ const routes = [
 let base_url = '/cms/';
 
 const router = createRouter({
-  // history: createWebHashHistory(base_url),
-  history: createWebHistory(base_url),
+  history: createWebHashHistory(base_url),
+  // history: createWebHistory(base_url),
   routes,
   scrollBehavior(to, from, savedPosition) {
     if (savedPosition) {

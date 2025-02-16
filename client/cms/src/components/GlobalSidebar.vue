@@ -8,7 +8,7 @@
 
     <nav>
       <ul>
-        <li v-for="(menu, index) in menus" :key="index" :class="['menu-item', 'menu-type-' + menu.type, { 'active': route.meta === menu.meta }]">
+        <li v-for="(menu, index) in menus" :key="index" :class="['menu-item', 'menu-type-' + menu.type, { 'active': route.meta.menu === menu.meta }]">
           <template v-if="menu.type === 'link'">
             <router-link :to="menu.path" @click="openSubMenu(menu, $event)">
               <icon-park :type="menu.icon" theme="outline" :strokeWidth="2.8" />
@@ -56,7 +56,7 @@ const menus = ref([
     type: 'link',
     icon: 'avatar',
     path: '/',
-    meta: 'home'
+    meta: 'dashboard'
   },
   {
     name: '首页设置',
@@ -111,6 +111,7 @@ const menus = ref([
     type: 'link',
     icon: 'setting',
     path: '/settings',
+    meta: 'settings',
   }
 ]);
 
@@ -210,18 +211,6 @@ onMounted(() => {
           border: 1px solid transparent;
           transition: var(--sidebar-collapse-transition);
 
-          &.router-link-active,
-          &.router-link-exact-active,
-          &.router-link-active:hover,
-          &.router-link-exact-active:hover {
-            color: var(--Text-brand);
-            background-color: var(--Neu-20);
-            border-color: var(--Neu-40);
-
-            svg {
-              fill: white;
-            }
-          }
 
           & > svg {
             width: 16px;
@@ -277,6 +266,19 @@ onMounted(() => {
             background-color: var(--Neu-20);
             color: var(--Text-primary);
           }
+        }
+
+        &.active a,
+        &.active span,
+        &.active span:hover,
+        &.active a:hover,
+        .router-link-active,
+        .router-link-exact-active,
+        .router-link-active:hover,
+        .router-link-exact-active:hover {
+          color: var(--Text-brand);
+          background-color: var(--Neu-20);
+          border-color: var(--Neu-40);
         }
 
         hr {

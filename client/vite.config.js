@@ -11,6 +11,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 export default defineConfig({
+  base: '/',
   build: {
     outDir: 'dist',
     emptyOutDir: true,
@@ -20,6 +21,8 @@ export default defineConfig({
         cms: resolve(__dirname, 'cms/index.html')
       },
       output: {
+        dir: 'dist',
+        format: 'es',
         chunkFileNames: 'js/[name]-[hash].js',
         entryFileNames: 'js/[name]-[hash].js',
         assetFileNames: 'assets/[name]-[hash][ext]',
