@@ -33,7 +33,6 @@
           <el-table :data="categories" style="width: 100%">
             <el-table-column prop="name" label="分类名称" />
             <el-table-column prop="description" label="描述" />
-            <el-table-column prop="type.name" label="所属类型" />
             <el-table-column label="操作" width="200">
               <template #default="{ row }">
                 <el-button @click="showCategoryDialog('edit', row)">编辑</el-button>
@@ -77,16 +76,6 @@
         <el-form-item label="分类名称" prop="name">
           <el-input v-model="categoryForm.name" />
         </el-form-item>
-        <el-form-item label="所属类型" prop="type_id">
-          <el-select v-model="categoryForm.type_id" placeholder="请选择类型">
-            <el-option
-              v-for="type in types"
-              :key="type.id"
-              :label="type.name"
-              :value="type.id"
-            />
-          </el-select>
-        </el-form-item>
         <el-form-item label="描述" prop="description">
           <el-input v-model="categoryForm.description" type="textarea" rows="3" />
         </el-form-item>
@@ -128,18 +117,16 @@ const categoryDialog = ref({ visible: false, type: 'add' });
 const categoryFormRef = ref(null);
 const categoryForm = ref({
   name: '',
-  type_id: '',
   description: ''
 });
 const categoryRules = {
-  name: [{ required: true, message: '请输入分类名称', trigger: 'blur' }],
-  type_id: [{ required: true, message: '请选择所属类型', trigger: 'change' }]
+  name: [{ required: true, message: '请输入分类名称', trigger: 'blur' }]
 };
 
 // Load data
 const loadTypes = async () => {
   try {
-    const res = await ajax.get('/api/types');
+    const res = await ajax.get('/types');
     types.value = res.data.data;
   } catch (error) {
     ElMessage.error('加载类型失败');
@@ -148,7 +135,7 @@ const loadTypes = async () => {
 
 const loadCategories = async () => {
   try {
-    const res = await ajax.get('/api/categories');
+    const res = await ajax.get('/categories');
     categories.value = res.data.data;
   } catch (error) {
     ElMessage.error('加载分类失败');
@@ -174,10 +161,10 @@ const handleTypeSubmit = async () => {
       loading.value = true;
       try {
         if (typeDialog.value.type === 'add') {
-          await ajax.post('/api/types', typeForm.value);
+          await ajax.post('/types', typeForm.value);
           ElMessage.success('添加成功');
         } else {
-          await ajax.put(`/api/types/${typeForm.value.id}`, typeForm.value);
+          await ajax.put(`/types/${typeForm.value.id}`, typeForm.value);
           ElMessage.success('更新成功');
         }
         typeDialog.value.visible = false;
@@ -197,7 +184,7 @@ const handleDeleteType = async (id) => {
       type: 'warning'
     });
     
-    await ajax.delete(`/api/types/${id}`);
+    await ajax.delete(`/types/${id}`);
     ElMessage.success('删除成功');
     loadTypes();
   } catch (error) {
@@ -214,7 +201,7 @@ const showCategoryDialog = (type, row = null) => {
   if (type === 'edit' && row) {
     categoryForm.value = { ...row };
   } else {
-    categoryForm.value = { name: '', type_id: '', description: '' };
+    categoryForm.value = { name: '', description: '' };
   }
 };
 
@@ -226,10 +213,10 @@ const handleCategorySubmit = async () => {
       loading.value = true;
       try {
         if (categoryDialog.value.type === 'add') {
-          await ajax.post('/api/categories', categoryForm.value);
+          await ajax.post('/categories', categoryForm.value);
           ElMessage.success('添加成功');
         } else {
-          await ajax.put(`/api/categories/${categoryForm.value.id}`, categoryForm.value);
+          await ajax.put(`/categories/${categoryForm.value.id}`, categoryForm.value);
           ElMessage.success('更新成功');
         }
         categoryDialog.value.visible = false;
@@ -249,7 +236,7 @@ const handleDeleteCategory = async (id) => {
       type: 'warning'
     });
     
-    await ajax.delete(`/api/categories/${id}`);
+    await ajax.delete(`/categories/${id}`);
     ElMessage.success('删除成功');
     loadCategories();
   } catch (error) {
