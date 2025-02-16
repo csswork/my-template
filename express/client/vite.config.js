@@ -1,9 +1,13 @@
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import path from 'path';
+import { fileURLToPath } from 'url';
+
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons';
 import { manualChunksPlugin } from 'vite-plugin-webpackchunkname';
-import { viteRequire } from 'vite-require'
+import { viteRequire } from 'vite-require';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // https://vite.dev/config/
 export default defineConfig({

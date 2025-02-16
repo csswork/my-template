@@ -1,4 +1,6 @@
 import path from 'path';
+import { fileURLToPath } from 'url';
+
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
@@ -28,8 +30,8 @@ dotenv.config();
 
 import userRouter from './web/routes/user.js';
 import aiRouter from './web/routes/ai.js';
-
-
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 const PORT = process.env.PORT || 3001;
 
 const app = express();
@@ -58,10 +60,15 @@ app.use('/api/', userRouter);
 // app.use('/api/', webRoutes);
 
 // Serve static assets in production
+console.log('NODE_ENV:' + process.env.NODE_ENV);
 if (process.env.NODE_ENV === 'production') {
-  app.use(express.static('client/dist'));
+  // Serve static files from the client dist directory
+  const clientDistPath = path.resolve(__dirname, '../../client/dist');
+  app.use(express.static(clientDistPath));
+  
+  // Serve index.html for all routes (SPA fallback)
   app.get('*', (req, res) => {
-    res.sendFile(path.resolve(__dirname, '../client/dist/index.html'));
+    res.sendFile(path.join(clientDistPath, 'index.html'));
   });
 }
 
