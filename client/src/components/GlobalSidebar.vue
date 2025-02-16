@@ -2,7 +2,7 @@
   <el-aside class="global-sidebar" ref="sidebar" :class="{ 'collapsed': isCollapsed }">
     <header>
       <h1 class="logo">
-        <strong>壹图网</strong><sup>{AI}</sup>
+        <strong>高视创意</strong><sup>{AI}</sup>
       </h1>
     </header>
 
@@ -32,15 +32,12 @@
 
     </nav>
 
-    <footer>
+    <footer> 
       <ul>
-        <li>许可证号：<a href="http://beian.miit.gov.cn" target="_blank">京ICP备2020035747号-2</a></li>
-        <li>京网文：〔2024〕0713-035号</li>
-        <li>增值电信业务许可证：京B2-20221210</li>
-        <li>网信算备：110115311070301240019号</li>
-        <li>京公网安备：<a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=11011502003620" target="_blank">11011502003620号</a></li>
+        <li>ICP经营许可证:津B2-20240095</li>
+        <li>津ICP备2023008040号-1</li>
       </ul>
-      <p>©{{ new Date().getFullYear() }} 壹图网版权所有。</p>
+      <p>©{{ new Date().getFullYear() }} 高视创意版权所有。</p>
     </footer>
   </el-aside>
 </template>
