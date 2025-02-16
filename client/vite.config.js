@@ -37,13 +37,13 @@ export default defineConfig({
   server: {
     port: 5178,
     host: true,
-    proxy: {
-      '/api': {
-        target: 'http://localhost:3000',
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, '/api')
-      }
-    }
+    // proxy: {
+    //   '/api': {
+    //     target: 'http://localhost:3001',
+    //     changeOrigin: true,
+    //     rewrite: (path) => path.replace(/^\/api/, '/api')
+    //   }
+    // }
   },
   plugins: [
     vue(),

@@ -7,12 +7,10 @@ import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 import App from './App.vue';
 import router from './router/index';
 import SvgIcon from '@/components/ui/SvgIcon.vue';
-import LoadingData from './components/ui/LoadingData.vue';
 
 const pinia = createPinia();
 const app = createApp(App);
 app.component('svg-icon', SvgIcon);
-app.component('ui-loading', LoadingData);
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
 app.component(key, component)
 }
