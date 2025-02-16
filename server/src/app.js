@@ -66,10 +66,20 @@ if (process.env.NODE_ENV === 'production') {
   app.use(express.static(clientDistPath));
   
   // Serve index.html for all routes (SPA fallback)
+  // app.get('*', (req, res) => {
+  //   res.sendFile(path.join(clientDistPath, 'index.html'));
+  // });
+
+  // Handle SPA routing
+  app.get('/cms/*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../../client/dist/cms/index.html'));
+  });
+  
   app.get('*', (req, res) => {
-    res.sendFile(path.join(clientDistPath, 'index.html'));
+    res.sendFile(path.join(__dirname, '../../client/dist/index.html'));
   });
 }
+
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);

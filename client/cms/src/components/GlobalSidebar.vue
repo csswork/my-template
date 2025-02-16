@@ -42,11 +42,8 @@
 </template>
 
 <script setup>
-import { ref, defineAsyncComponent, onMounted } from 'vue';
-import { useGlobalStore } from '@/stores/Global';
+import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import event from '@/utils/EventBus';
-// import { Home } from '@icon-park/vue-next';
 import { IconPark } from '@icon-park/vue-next/es/all';
 
 const router = useRouter();
@@ -66,14 +63,14 @@ const menus = ref([
     type: 'link',
     icon: 'page',
     path: '/home',
-    meta: 'explore'
+    meta: 'home'
   },
   {
     name: '内容管理',
     type: 'link',
     icon: 'doc-search',
     path: '/posts',
-    meta: 'content',
+    meta: 'posts',
   },
   {
     name: '用户管理',
@@ -96,7 +93,7 @@ const menus = ref([
     name: '消息中心',
     type: 'link',
     icon: 'Remind',
-    meta: 'notification',
+    meta: 'notifications',
     path: '/notifications',
   },
   {
