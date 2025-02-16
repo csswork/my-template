@@ -24,6 +24,7 @@ import { initJobs } from './jobs/index.js';
 import cmsRoutes from './cms/routes/admin.js';
 import typesRouter from './cms/routes/types.js';
 import categoriesRouter from './cms/routes/categories.js';
+import usersRouter from './cms/routes/users.js';
 // import postsRouter from './cms/routes/posts';
 
 
@@ -55,6 +56,7 @@ initJobs();
 app.use('/api/cms', cmsRoutes);
 app.use('/api/cms', typesRouter);
 app.use('/api/cms', categoriesRouter);
+app.use('/api/cms', usersRouter);
 // app.use('/cms/api/', postsRouter);
 
 // Web
