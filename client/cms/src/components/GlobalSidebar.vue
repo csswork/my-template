@@ -2,7 +2,7 @@
   <el-aside class="global-sidebar" ref="sidebar" :class="{ 'collapsed': isCollapsed }">
     <header>
       <h1 class="logo">
-        <strong>高视创意</strong><sup>{AI}</sup>
+        <strong>高视创意</strong><sup>{CMS}</sup>
       </h1>
     </header>
 
@@ -11,15 +11,14 @@
         <li v-for="(menu, index) in menus" :key="index" :class="['menu-item', 'menu-type-' + menu.type, { 'active': route.meta === menu.meta }]">
           <template v-if="menu.type === 'link'">
             <router-link :to="menu.path" @click="openSubMenu(menu, $event)">
-              <Home v-if="menu.icon === 'Home'" theme="outline" size="16" :strokeWidth="2.8" />
-              <component v-else :is="menu.icon" />
+              <icon-park :type="menu.icon" theme="outline" :strokeWidth="2.8" />
               <span>{{ menu.name }}</span>
             </router-link>
           </template>
 
           <template v-else-if="menu.type === 'fun'">
             <span @click="menu.cb">
-              <component :is="menu.icon" />
+              <icon-park :type="menu.icon" theme="outline" :strokeWidth="2.8" />
               <span>{{ menu.name }}</span>
             </span>
           </template>
@@ -47,73 +46,74 @@ import { ref, defineAsyncComponent, onMounted } from 'vue';
 import { useGlobalStore } from '@/stores/Global';
 import { useRouter } from 'vue-router';
 import event from '@/utils/EventBus';
-import { Home } from '@icon-park/vue-next';
-// import { Service } from '@element-plus/icons-vue';
+// import { Home } from '@icon-park/vue-next';
+import { IconPark } from '@icon-park/vue-next/es/all';
 
 const router = useRouter();
 const route = router.currentRoute;
 
-const GlobalStore = useGlobalStore();
 const isCollapsed = ref(false);
 const menus = ref([
 {
-    name: '首页',
+    name: '会员中心',
     type: 'link',
-    icon: 'Home',
+    icon: 'avatar',
     path: '/',
     meta: 'home'
   },
   {
-    name: '探索',
+    name: '首页设置',
     type: 'link',
-    icon: 'CoffeeCup',
-    path: '/explore',
+    icon: 'page',
+    path: '/home',
     meta: 'explore'
   },
   {
-    name: '个人主页',
+    name: '内容管理',
     type: 'link',
-    icon: 'User',
-    path: '/personal',
-    meta: 'personal',
+    icon: 'doc-search',
+    path: '/posts',
+    meta: 'content',
   },
   {
-    name: '资产',
+    name: '用户管理',
     type: 'link',
-    icon: 'Box',
-    path: '/asset',
-    meta: 'asset',
+    icon: 'EveryUser',
+    path: '/users',
+    meta: 'users',
   },
   {
-    name: '图片生成',
-    type: 'fun',
-    icon: 'MagicStick',
-    // path: '/image/generate',
-    meta: 'generate-image',
-    cb: () => {
-      event.emit('open-ai');
-    }
+    name: '充值管理',
+    type: 'link',
+    icon: 'currency',
+    path: '/payments',
+    meta: 'payments',
   },
   {
     type: 'hr',
   },
   {
     name: '消息中心',
-    type: 'fun',
-    icon: 'Bell',
+    type: 'link',
+    icon: 'Remind',
     meta: 'notification',
-    cb: () => {
-      event.emit('open-notification');
-    }
+    path: '/notifications',
   },
   {
-    name: '邀请',
-    type: 'fun',
-    icon: 'Message',
-    meta: 'social-insights',
-    cb: () => {
-      event.emit('open-invite');
-    }
+    name: '邀请列表',
+    type: 'link',
+    icon: 'mail-edit',
+    meta: 'invitations',
+    path: '/invitations',
+  },
+  {
+    type: 'hr',
+  },
+  {
+    name: '系统设置',
+    type: 'link',
+    icon: 'setting',
+    path: '/settings',
   }
 ]);
 

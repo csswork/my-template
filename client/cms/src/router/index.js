@@ -4,24 +4,24 @@ const routes = [
   {
     path: '/',
     name: 'home',
-    component: () => import(/* webpackChunkName: "home" */ '../views/HomePage.vue'),
+    component: () => import(/* webpackChunkName: "home" */ '../views/Dashboard.vue'),
     meta: {
       heading: '首页',
-      requiresAuth: false
+      requiresAuth: true
     }
   },
-  {
-    path: '/login',
-    name: 'login',
-    component: () => import(/* webpackChunkName: "login" */ '../views/LoginPage.vue'),
-    meta: {
-      heading: '登录',
-      requiresAuth: false
-    }
-  },
+  // {
+  //   path: '/login',
+  //   name: 'login',
+  //   component: () => import(/* webpackChunkName: "login" */ '../views/LoginPage.vue'),
+  //   meta: {
+  //     heading: '登录',
+  //     requiresAuth: false
+  //   }
+  // },
 ];
 
-let base_url = '/';
+let base_url = '/cms/';
 
 const router = createRouter({
   // history: createWebHashHistory(base_url),

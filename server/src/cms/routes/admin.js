@@ -8,6 +8,7 @@ const router = express.Router();
 
 // Public routes
 router.post('/login', validateLogin, validate, userController.login);
+router.get('/me', auth, authorize('admin'), userController.getUserByToken);
 router.get('/profile', auth, authorize('admin'), userController.getProfile);
 router.post('/profile', auth, authorize('admin'), userController.updateProfile);
 router.post('/logout', auth, authorize('admin'), userController.logout);

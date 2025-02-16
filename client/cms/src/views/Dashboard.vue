@@ -1,7 +1,7 @@
 <template>
   <global-wrap>
     <div class="home-page">
-
+ssss
     </div>
   </global-wrap>
 </template>

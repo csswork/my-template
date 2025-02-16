@@ -346,3 +346,9 @@ img {
     background-color: var(--Bg-light);
     height: 100vh;
   }
+
+  .i-icon {
+    svg {
+      fill: none;
+    }
+  }
